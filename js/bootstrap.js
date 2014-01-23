@@ -1,3 +1,4 @@
+var utils;
 var game;
 /**
 * Create a canvas element and return it.
@@ -19,8 +20,9 @@ var buildCanvas = function() {
 * Load the necessary components and run.
 */
 var setup = function() {
-  var body  = document.getElementById("body");
-  var div   = document.createElement("div");
+  var body = document.getElementById("body");
+  var div  = document.createElement("div");
+  utils    = new Utils();
 
   if(div) {
     div.id = config.GAME_CONTENT_ID;
