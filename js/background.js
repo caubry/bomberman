@@ -5,6 +5,10 @@ Background = Class.extend({
 
   layers: [],
 
+  /**
+  * From the JSON file data, set the properties of each layer
+  * and draw to the canvas.
+  */
   renderLayer: function(layer) {
     if (layer.type !== "tilelayer" || !layer.opacity) { return; }
     size = game.background.data.tilewidth;
@@ -32,6 +36,9 @@ Background = Class.extend({
     }
   },
 
+  /**
+  * Iterate the layers and render each one
+  */
   renderLayers: function(layers) {
     layers = $.isArray(layers) ? layers : this.data.layers;
     layers.forEach(this.renderLayer);
