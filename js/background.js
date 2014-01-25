@@ -17,18 +17,16 @@ Background = Class.extend({
       layer.data.forEach(function(tile_idx, i) {
         if (!tile_idx) { return; }
         var img_x, img_y, s_x, s_y,
-        
         tile = game.background.data.tilesets[0];
-        tile_idx--;
-        
+        tile_idx--;        
+
         img_x = (tile_idx % (tile.imagewidth / size)) * size;
-        img_y = ~~(tile_idx / (tile.imagewidth / size)) * size;
-        
+        img_y = Math.floor(tile_idx / (tile.imagewidth / size)) * size;
+
         s_x = (i % layer.width) * size;
-        s_y = ~~(i / layer.width) * size;
+        s_y = Math.floor(i / layer.width) * size;
        
-        game.ctx.drawImage(game.background.tileset, img_x, img_y, size, size,
-                    s_x, s_y, size, size);
+        game.ctx.drawImage(game.background.tileset, img_x, img_y, size, size, s_x, s_y, size, size);
       });
       
       game.background.layers.push(game.ctx.canvas.toDataURL());
@@ -60,7 +58,7 @@ Background = Class.extend({
   */
   load: function(name) {
     var _this = this;
-    $.getJSON("/tilesets/" + name + ".json", function(data) {
+    $.getJSON(config.MAP_DATA, function(data) {
       _this.loadTileset(data);
     });
   }
