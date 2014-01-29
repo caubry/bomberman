@@ -5,6 +5,17 @@ Background = Class.extend({
 
   layers: [],
 
+  STATIC_BLOCK          : "static-blocks",
+  DESPICABLE_BLOCK      : "despicable-block",
+  DESPICABLE_COLLISION  : "despicable-collision",
+
+  dataNames: {
+    none              : 0,
+    destroyable_block : 1,
+    grey_block        : 2,
+    green_block       : 3
+  },
+
   /**
   * Draw to the canvas.
   */
@@ -30,56 +41,58 @@ Background = Class.extend({
   },
 
   /**
-  * From the JSON file data, set the properties of each layer
-  */
-  renderLayer: function(layer) {
-    for (var key in layer)
-    {
-      switch(layer[key]) {
-        case "static-blocks": {
-          game.background.drawTiles(layer);
-        }
-        break;
-        case "despicable-block": {
-          console.log('despicable-block: ')
-          layer.data[1] = 1;
-          layer.data[2] = 1;
-          layer.data[3] = 1;
-          console.log(layer.data[1])
-          if (layer.type !== "tilelayer" || !layer.opacity) { return; }
-          size = game.background.data.tilewidth;
-
-          if (game.background.layers.length < game.background.data.layers.length) {
-            layer.data.forEach(function(tile_idx, i) {
-              if (!tile_idx) { return; }
-              var img_x, img_y, s_x, s_y,
-              tile = game.background.data.tilesets[0];
-              tile_idx--;        
-
-              img_x = (tile_idx % (tile.imagewidth / size)) * size;
-              img_y = Math.floor(tile_idx / (tile.imagewidth / size)) * size;
-
-              s_x = (i * 1 % layer.width) * size;
-              s_y = (i * 1 % layer.width) * size;
-              game.ctx.drawImage(game.background.tileset, img_x, img_y, size, size, s_x, s_y, size, size);
-            });
-          }
-        }
-        break;
-        case "despicable-collision": {
-          console.log('despicable-collision')
-        }
-        break;
-        }
-    }
-  },
-
-  /**
   * Iterate the layers and render each one
   */
   renderLayers: function(layers) {
     layers = $.isArray(layers) ? layers : this.data.layers;
-    layers.forEach(this.renderLayer);
+
+    var totalGreenTiles = [];
+    var greenBlock      = {};
+    var currentMaxDestroyableBlock;
+
+    for (var key in layers) {
+      var currentLayer = layers[key];
+      switch(currentLayer['name']) {
+        case game.background.STATIC_BLOCK: {
+          var currentTile = game.background.dataNames['green_block'];
+          for (var i = 0; i < currentLayer.data.length; i++) {
+            if (currentLayer.data[i] === currentTile) {
+              greenBlock[i] = currentLayer.data[i];
+              // Keep a track on the total number of 'green tiles'
+              totalGreenTiles.push(currentLayer.data[i]);
+            }
+          }
+          for (var number in currentLayer.data) {
+            if (currentLayer.data[number] === 0) {
+              currentLayer.data[number] = game.background.dataNames['green_block'];
+            }
+          }
+          game.background.drawTiles(currentLayer);
+        }
+        break;
+        case game.background.DESPICABLE_BLOCK: {
+          currentMaxDestroyableBlock = utils.getRandomInt((totalGreenTiles.length - 50), (totalGreenTiles.length - 10));
+          var blocksToBeRemoved       = totalGreenTiles.length - currentMaxDestroyableBlock;
+          var desiredIndex;
+          for (var i = 0; i < currentLayer.data.length; i++) {
+            if (greenBlock[i]) {
+              desiredIndex = Math.floor(Math.random() * currentLayer.data.length);
+              currentLayer.data[i] = game.background.dataNames['destroyable_block'];
+            }
+            else {
+              currentLayer.data[i] = game.background.dataNames['none'];
+              currentLayer.data[desiredIndex] = game.background.dataNames['none'];
+            }
+          }
+          game.background.drawTiles(currentLayer);
+        }
+        break;
+        case game.background.DESPICABLE_COLLISION: {
+          console.log('despicable-collision')
+        }
+        break;
+      }
+    }
   },
 
   /**

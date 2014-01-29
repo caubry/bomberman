@@ -10,5 +10,13 @@ Utils = Class.extend({
     xhr.open("GET", reqUri, true);
     xhr.onload = callback;
     xhr.send();
-  }
+  },
+
+  /**
+  * Pass a min and max value
+  * and return a random integer inbetween.
+  */
+	getRandomInt: function(min, max) {
+   	return Math.floor(Math.random() * (max - min + 1)) + min;
+  },
 });
