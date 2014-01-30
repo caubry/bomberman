@@ -35,6 +35,7 @@ Background = Class.extend({
 
         s_x = (i % layer.width) * size;
         s_y = Math.floor(i / layer.width) * size;
+
         game.ctx.drawImage(game.background.tileset, img_x, img_y, size, size, s_x, s_y, size, size);
       });
     }
@@ -45,45 +46,70 @@ Background = Class.extend({
   */
   renderLayers: function(layers) {
     layers = $.isArray(layers) ? layers : this.data.layers;
-
+    // Keep a track on the total number of 'green tiles'
     var totalGreenTiles = [];
-    var greenBlock      = {};
-    var currentMaxDestroyableBlock;
+    // Safe areas for the characters, when spawning
+    var safeZonesTiles  = [];
+    // Store the different layers
+    var mapLayers = {};
 
     for (var key in layers) {
       var currentLayer = layers[key];
+
       switch(currentLayer['name']) {
         case game.background.STATIC_BLOCK: {
-          var currentTile = game.background.dataNames['green_block'];
+          mapLayers['static_block_layer'] = currentLayer;
+
+          /*Grab the 'green' tiles data, save the safe areas
+          and add green tiles on top of these safe areas*/
           for (var i = 0; i < currentLayer.data.length; i++) {
-            if (currentLayer.data[i] === currentTile) {
-              greenBlock[i] = currentLayer.data[i];
-              // Keep a track on the total number of 'green tiles'
+            if (currentLayer.data[i] === game.background.dataNames['green_block']) {
               totalGreenTiles.push(currentLayer.data[i]);
             }
-          }
-          for (var number in currentLayer.data) {
-            if (currentLayer.data[number] === 0) {
-              currentLayer.data[number] = game.background.dataNames['green_block'];
+            else if (currentLayer.data[i] === game.background.dataNames['none']) {
+              safeZonesTiles.push(i);
+              currentLayer.data[i] = game.background.dataNames['green_block'];
             }
           }
           game.background.drawTiles(currentLayer);
         }
         break;
         case game.background.DESPICABLE_BLOCK: {
-          currentMaxDestroyableBlock = utils.getRandomInt((totalGreenTiles.length - 50), (totalGreenTiles.length - 10));
-          var blocksToBeRemoved       = totalGreenTiles.length - currentMaxDestroyableBlock;
+          /*Determine how many blocks can be placed on the map, 
+          using the total amount of 'green' tiles*/
+          var currentMaxDestroyableBlock = utils.getRandomInt(
+                                            (totalGreenTiles.length - 40), 
+                                            (totalGreenTiles.length - 10)
+                                          );
+          var randomIndexesArray = [];
+          var destroyableBlocks  = [];
           var desiredIndex;
-          for (var i = 0; i < currentLayer.data.length; i++) {
-            if (greenBlock[i]) {
-              desiredIndex = Math.floor(Math.random() * currentLayer.data.length);
-              currentLayer.data[i] = game.background.dataNames['destroyable_block'];
+
+          /*Add the 'green' tile area to the destroyable blocks
+          and remove any extra 'destroyable blocks' from the map*/
+          for (var w = 0; w < mapLayers['static_block_layer'].data.length; w++) {
+            if (mapLayers['static_block_layer'].data[w] === game.background.dataNames['green_block']){
+                destroyableBlocks.push(w);
             }
-            else {
-              currentLayer.data[i] = game.background.dataNames['none'];
-              currentLayer.data[desiredIndex] = game.background.dataNames['none'];
-            }
-          }
+            else currentLayer.data[w] = game.background.dataNames['none'];
+          };
+
+          // Remove the safe zone areas from the destroyable blocks
+          for (var j = 0; j < safeZonesTiles.length; j++) {
+            destroyableBlocks.splice(destroyableBlocks.indexOf(safeZonesTiles[j]), 1);
+          };
+
+          // Grab a random tile on every possible destroyable block
+          for (var i = 0; i < currentMaxDestroyableBlock; i++) {
+              desiredIndex = utils.getRandomIntFromArray(destroyableBlocks);
+              if (randomIndexesArray.indexOf(desiredIndex) > -1) i--;
+              else randomIndexesArray.push(desiredIndex);
+          };
+
+          // Add the value of 'destroyable block' to the current layer data
+          for (var z = 0; z < randomIndexesArray.length; z++) {
+            currentLayer.data[randomIndexesArray[z]] = game.background.dataNames['destroyable_block'];
+          };
           game.background.drawTiles(currentLayer);
         }
         break;

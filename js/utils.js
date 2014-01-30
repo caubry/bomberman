@@ -1,17 +1,4 @@
-/**
-* 
-*/
 Utils = Class.extend({
-  /**
-  * Send a request to a server.
-  */
-  xhrGet: function(reqUri, callback) {
-    var xhr = new XMLHttpRequest();
-    xhr.open("GET", reqUri, true);
-    xhr.onload = callback;
-    xhr.send();
-  },
-
   /**
   * Pass a min and max value
   * and return a random integer inbetween.
@@ -19,4 +6,12 @@ Utils = Class.extend({
 	getRandomInt: function(min, max) {
    	return Math.floor(Math.random() * (max - min + 1)) + min;
   },
+
+  /**
+  * Pass an array
+  * and return a random integer from this array.
+  */
+  getRandomIntFromArray: function(array) {
+    return array[Math.floor(Math.random() * array.length)]
+  }
 });
