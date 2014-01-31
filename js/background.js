@@ -5,6 +5,7 @@ Background = Class.extend({
 
   layers: [],
 
+  // Layers named from the json file
   STATIC_BLOCK          : "static-blocks",
   DESPICABLE_BLOCK      : "despicable-block",
   DESPICABLE_COLLISION  : "despicable-collision",
@@ -58,7 +59,7 @@ Background = Class.extend({
 
       switch(currentLayer['name']) {
         case game.background.STATIC_BLOCK: {
-          mapLayers['static_block_layer'] = currentLayer;
+          mapLayers[game.background.STATIC_BLOCK] = currentLayer;
 
           /*Grab the 'green' tiles data, save the safe areas
           and add green tiles on top of these safe areas*/
@@ -75,20 +76,23 @@ Background = Class.extend({
         }
         break;
         case game.background.DESPICABLE_BLOCK: {
+          mapLayers[game.background.DESPICABLE_BLOCK] = currentLayer;
           /*Determine how many blocks can be placed on the map, 
           using the total amount of 'green' tiles*/
           var currentMaxDestroyableBlock = utils.getRandomInt(
                                             (totalGreenTiles.length - 40), 
                                             (totalGreenTiles.length - 10)
                                           );
+
+          var staticLayer        = mapLayers[game.background.STATIC_BLOCK];
           var randomIndexesArray = [];
           var destroyableBlocks  = [];
           var desiredIndex;
 
           /*Add the 'green' tile area to the destroyable blocks
           and remove any extra 'destroyable blocks' from the map*/
-          for (var w = 0; w < mapLayers['static_block_layer'].data.length; w++) {
-            if (mapLayers['static_block_layer'].data[w] === game.background.dataNames['green_block']){
+          for (var w = 0; w < staticLayer.data.length; w++) {
+            if (staticLayer.data[w] === game.background.dataNames['green_block']){
                 destroyableBlocks.push(w);
             }
             else currentLayer.data[w] = game.background.dataNames['none'];
@@ -114,6 +118,7 @@ Background = Class.extend({
         }
         break;
         case game.background.DESPICABLE_COLLISION: {
+          mapLayers[game.background.DESPICABLE_COLLISION] = currentLayer;
           console.log('despicable-collision')
         }
         break;
