@@ -4,7 +4,6 @@ Powerups = Class.extend({
     this.draw();
 	},
 
-	draw: function() {
-	}
+	draw: function() {}
 
 });
