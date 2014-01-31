@@ -1,9 +1,7 @@
-/**
-* 
-*/
-Background = Class.extend({
+Map = Class.extend({
 
   layers: [],
+  powerups: null,
 
   // Layers named from the json file
   STATIC_BLOCK          : "static-blocks",
@@ -22,13 +20,13 @@ Background = Class.extend({
   */
   drawTiles: function(layer) {
     if (layer.type !== "tilelayer" || !layer.opacity) { return; }
-    size = game.background.data.tilewidth;
+    size = game.map.data.tilewidth;
 
-    if (game.background.layers.length < game.background.data.layers.length) {
+    if (game.map.layers.length < game.map.data.layers.length) {
       layer.data.forEach(function(tile_idx, i) {
         if (!tile_idx) { return; }
         var img_x, img_y, s_x, s_y,
-        tile = game.background.data.tilesets[0];
+        tile = game.map.data.tilesets[0];
         tile_idx--;        
 
         img_x = (tile_idx % (tile.imagewidth / size)) * size;
@@ -37,7 +35,7 @@ Background = Class.extend({
         s_x = (i % layer.width) * size;
         s_y = Math.floor(i / layer.width) * size;
 
-        game.ctx.drawImage(game.background.tileset, img_x, img_y, size, size, s_x, s_y, size, size);
+        game.ctx.drawImage(game.map.tileset, img_x, img_y, size, size, s_x, s_y, size, size);
       });
     }
   },
@@ -58,25 +56,28 @@ Background = Class.extend({
       var currentLayer = layers[key];
 
       switch(currentLayer['name']) {
-        case game.background.STATIC_BLOCK: {
-          mapLayers[game.background.STATIC_BLOCK] = currentLayer;
+        case game.map.STATIC_BLOCK: {
+          mapLayers[game.map.STATIC_BLOCK] = currentLayer;
 
           /*Grab the 'green' tiles data, save the safe areas
           and add green tiles on top of these safe areas*/
           for (var i = 0; i < currentLayer.data.length; i++) {
-            if (currentLayer.data[i] === game.background.dataNames['green_block']) {
+            if (currentLayer.data[i] === game.map.dataNames['green_block']) {
               totalGreenTiles.push(currentLayer.data[i]);
             }
-            else if (currentLayer.data[i] === game.background.dataNames['none']) {
+            else if (currentLayer.data[i] === game.map.dataNames['none']) {
               safeZonesTiles.push(i);
-              currentLayer.data[i] = game.background.dataNames['green_block'];
+              currentLayer.data[i] = game.map.dataNames['green_block'];
             }
           }
-          game.background.drawTiles(currentLayer);
+          game.map.drawTiles(currentLayer);
+          // Generate and draw powerups on top of the 'green' tiles
+          game.map.powerups = new Powerups();
+          game.map.powerups.init(currentLayer);
         }
         break;
-        case game.background.DESPICABLE_BLOCK: {
-          mapLayers[game.background.DESPICABLE_BLOCK] = currentLayer;
+        case game.map.DESPICABLE_BLOCK: {
+          mapLayers[game.map.DESPICABLE_BLOCK] = currentLayer;
           /*Determine how many blocks can be placed on the map, 
           using the total amount of 'green' tiles*/
           var currentMaxDestroyableBlock = utils.getRandomInt(
@@ -84,7 +85,7 @@ Background = Class.extend({
                                             (totalGreenTiles.length - 10)
                                           );
 
-          var staticLayer        = mapLayers[game.background.STATIC_BLOCK];
+          var staticLayer        = mapLayers[game.map.STATIC_BLOCK];
           var randomIndexesArray = [];
           var destroyableBlocks  = [];
           var desiredIndex;
@@ -92,10 +93,10 @@ Background = Class.extend({
           /*Add the 'green' tile area to the destroyable blocks
           and remove any extra 'destroyable blocks' from the map*/
           for (var w = 0; w < staticLayer.data.length; w++) {
-            if (staticLayer.data[w] === game.background.dataNames['green_block']){
+            if (staticLayer.data[w] === game.map.dataNames['green_block']){
                 destroyableBlocks.push(w);
             }
-            else currentLayer.data[w] = game.background.dataNames['none'];
+            else currentLayer.data[w] = game.map.dataNames['none'];
           };
 
           // Remove the safe zone areas from the destroyable blocks
@@ -112,13 +113,14 @@ Background = Class.extend({
 
           // Add the value of 'destroyable block' to the current layer data
           for (var z = 0; z < randomIndexesArray.length; z++) {
-            currentLayer.data[randomIndexesArray[z]] = game.background.dataNames['destroyable_block'];
+            currentLayer.data[randomIndexesArray[z]] = game.map.dataNames['destroyable_block'];
           };
-          game.background.drawTiles(currentLayer);
+
+          game.map.drawTiles(currentLayer);
         }
         break;
-        case game.background.DESPICABLE_COLLISION: {
-          mapLayers[game.background.DESPICABLE_COLLISION] = currentLayer;
+        case game.map.DESPICABLE_COLLISION: {
+          mapLayers[game.map.DESPICABLE_COLLISION] = currentLayer;
           console.log('despicable-collision')
         }
         break;
