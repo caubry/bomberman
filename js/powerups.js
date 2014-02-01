@@ -1,6 +1,8 @@
 Powerups = Class.extend({
 
-  totalDestroyableBlock : null,
+  layer: null,
+  destroybleLayer: null,
+  totalDestroyableBlock: null,
   totalPowerUps:null,
 
   // Tile number of power-ups 
@@ -15,16 +17,22 @@ Powerups = Class.extend({
     {skull: null,             tile: 11}
   ],
 
-	init: function(totalDestroyableBlock) {
+  init: function(layer, destroybleLayer, totalDestroyableBlock) {
+    this.layer                 = layer;
+    // Powerups are hidden under destroyable blocks
+    this.destroybleLayer       = destroybleLayer;
     this.totalDestroyableBlock = totalDestroyableBlock;
-    console.log('totalDestroyableBlock: ' + totalDestroyableBlock)
   },
 
   setup: function() {
     var totalDropChance    = 0;
     var accurateDropChance = 0;
+    var totalDropItem      = 0;
+    var canBeAdded         = 0;
     var dropChance         = [];
     var powerupsClasses    = [];
+    var dropItem           = [];
+    var extraDropItem           = [];
 
     var desiredRandomPowerups = utils.getRandomInt(
       (Math.floor(this.totalDestroyableBlock * (10 / 100))), 
@@ -57,15 +65,48 @@ Powerups = Class.extend({
 
     // Give the exact drop rate based on the total drop chance
     for (var j = 0; j < powerupsClasses.length; j++) {
-      // note: ensure that the percentage is at 100% not above or below
       accurateDropChance = powerupsClasses[j].getDropChance() / totalDropChance;
-      powerupsClasses[j].setDropChance(accurateDropChance);
-      // console.log(desiredRandomPowerups)
-      console.log((desiredRandomPowerups / powerupsClasses[j].getDropChance()) / 100);
+      itemDrops = Math.floor(accurateDropChance * desiredRandomPowerups);
+      powerupsClasses[j].setDropItem(itemDrops);
+      dropItem.push(itemDrops);
     };
+
+    // Get the total drop chance value
+    $.each(dropItem,function() {
+      totalDropItem += this;
+    });
+
+    if (totalDropItem < desiredRandomPowerups) {
+      canBeAdded = desiredRandomPowerups - totalDropItem;
+    }
+
+    // // Add more drop items to the total
+    for (var z = 0; z < this.powerUpsName.length; z++) {
+      for (var key in this.powerUpsName[z]) {
+        if (key != 'tile') {
+          if (canBeAdded > 1) {
+            var currentDrop = this.powerUpsName[z][key].getDropItem();
+            if (currentDrop < 1) {
+              this.powerUpsName[z][key].setDropItem(currentDrop + 1);
+            }
+            canBeAdded--;
+          }
+        }
+      }
+    };
+
+    // for (var z = 0; z < this.destroybleLayer.data.length; z++) {
+    //   if (this.destroybleLayer.data[z] > 0) {
+    //     // this.layer.data[z] = 5;
+    //   }
+    // };
   },
 
-	getCurrentLayer: function() {
-    return this.currentLayer;
-	}
+  getTotalPowerUps: function() {
+    return this.totalPowerUps;
+  },
+
+  getCurrentLayer: function() {
+    return this.layer;
+  }
 });

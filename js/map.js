@@ -122,11 +122,12 @@ Map = Class.extend({
         }
         break;
         case game.map.POWER_UPS: {
+          mapLayers[game.map.POWER_UPS] = currentLayer;
           // Generate and draw powerups on top of the 'green' tiles
-          game.map.powerups = new Powerups(currentMaxDestroyableBlock);
+          game.map.powerups = new Powerups(mapLayers[game.map.POWER_UPS], mapLayers[game.map.DESPICABLE_BLOCK], currentMaxDestroyableBlock);
           game.map.powerups.setup();
           // this.dataNames['power_ups'] = game.map.powerups
-          // game.map.drawTiles(game.map.powerups.getCurrentLayer());
+          game.map.drawTiles(game.map.powerups.getCurrentLayer());
         }
         break;
         case game.map.DESPICABLE_COLLISION: {
