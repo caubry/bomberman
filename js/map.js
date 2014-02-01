@@ -6,13 +6,15 @@ Map = Class.extend({
   // Layers named from the json file
   STATIC_BLOCK          : "static-blocks",
   DESPICABLE_BLOCK      : "despicable-block",
+  POWER_UPS             : "power-ups",
   DESPICABLE_COLLISION  : "despicable-collision",
 
   dataNames: {
     none              : 0,
     destroyable_block : 1,
     grey_block        : 2,
-    green_block       : 3
+    green_block       : 3,
+    power_ups         : null
   },
 
   /**
@@ -49,8 +51,12 @@ Map = Class.extend({
     var totalGreenTiles = [];
     // Safe areas for the characters, when spawning
     var safeZonesTiles  = [];
+    // Store areas where blocks and power-ups can be placed
+    var gameElement     = [];
     // Store the different layers
     var mapLayers = {};
+    // Total of destroyable blocks
+    var currentMaxDestroyableBlock;
 
     for (var key in layers) {
       var currentLayer = layers[key];
@@ -71,52 +77,56 @@ Map = Class.extend({
             }
           }
           game.map.drawTiles(currentLayer);
-          // Generate and draw powerups on top of the 'green' tiles
-          game.map.powerups = new Powerups();
-          game.map.powerups.init(currentLayer);
         }
         break;
         case game.map.DESPICABLE_BLOCK: {
           mapLayers[game.map.DESPICABLE_BLOCK] = currentLayer;
-          /*Determine how many blocks can be placed on the map, 
-          using the total amount of 'green' tiles*/
-          var currentMaxDestroyableBlock = utils.getRandomInt(
-                                            (totalGreenTiles.length - 40), 
-                                            (totalGreenTiles.length - 10)
-                                          );
 
           var staticLayer        = mapLayers[game.map.STATIC_BLOCK];
           var randomIndexesArray = [];
-          var destroyableBlocks  = [];
           var desiredIndex;
+          
+          /*Determine how many blocks can be placed on the map, 
+          using the total amount of 'green' tiles*/
+          currentMaxDestroyableBlock = utils.getRandomInt(
+            (totalGreenTiles.length - 40), 
+            (totalGreenTiles.length - 10)
+          );
 
           /*Add the 'green' tile area to the destroyable blocks
           and remove any extra 'destroyable blocks' from the map*/
           for (var w = 0; w < staticLayer.data.length; w++) {
             if (staticLayer.data[w] === game.map.dataNames['green_block']){
-                destroyableBlocks.push(w);
+                gameElement.push(w);
             }
             else currentLayer.data[w] = game.map.dataNames['none'];
-          };
+          }
 
           // Remove the safe zone areas from the destroyable blocks
           for (var j = 0; j < safeZonesTiles.length; j++) {
-            destroyableBlocks.splice(destroyableBlocks.indexOf(safeZonesTiles[j]), 1);
-          };
+            gameElement.splice(gameElement.indexOf(safeZonesTiles[j]), 1);
+          }
 
           // Grab a random tile on every possible destroyable block
           for (var i = 0; i < currentMaxDestroyableBlock; i++) {
-              desiredIndex = utils.getRandomIntFromArray(destroyableBlocks);
+              desiredIndex = utils.getRandomIntFromArray(gameElement);
               if (randomIndexesArray.indexOf(desiredIndex) > -1) i--;
               else randomIndexesArray.push(desiredIndex);
-          };
+          }
 
           // Add the value of 'destroyable block' to the current layer data
           for (var z = 0; z < randomIndexesArray.length; z++) {
             currentLayer.data[randomIndexesArray[z]] = game.map.dataNames['destroyable_block'];
-          };
-
-          game.map.drawTiles(currentLayer);
+          }
+          // game.map.drawTiles(currentLayer);
+        }
+        break;
+        case game.map.POWER_UPS: {
+          // Generate and draw powerups on top of the 'green' tiles
+          game.map.powerups = new Powerups(currentMaxDestroyableBlock);
+          game.map.powerups.setup();
+          // this.dataNames['power_ups'] = game.map.powerups
+          // game.map.drawTiles(game.map.powerups.getCurrentLayer());
         }
         break;
         case game.map.DESPICABLE_COLLISION: {

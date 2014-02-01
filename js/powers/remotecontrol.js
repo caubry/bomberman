@@ -1,5 +1,5 @@
-ExtraBomb = PowerEntity.extend({
-  dropChance: 90,
+RemoteControl = PowerEntity.extend({
+  dropChance: 10,
 
   init: function() {
     this._super();

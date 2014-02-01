@@ -13,5 +13,14 @@ Utils = Class.extend({
   */
   getRandomIntFromArray: function(array) {
     return array[Math.floor(Math.random() * array.length)]
+  },
+
+  /**
+  * Uppercase the first letter of a given String
+  */
+  capitaliseFirstLetter: function(str) {
+    return str.replace(/^./, function(txt) {
+      return txt.toUpperCase();
+    });
   }
 });

@@ -1,5 +1,5 @@
-ExtraBomb = PowerEntity.extend({
-  dropChance: 90,
+ExplosionExpander = PowerEntity.extend({
+  dropChance: 20,
 
   init: function() {
     this._super();
