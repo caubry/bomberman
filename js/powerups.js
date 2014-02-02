@@ -29,16 +29,17 @@ Powerups = Class.extend({
     var accurateDropChance = 0;
     var totalDropItem      = 0;
     var canBeAdded         = 0;
+    var desiredIndex       = 0;
     var dropChance         = [];
     var powerupsClasses    = [];
     var dropItem           = [];
-    var extraDropItem           = [];
+    var availableTiles     = [];
+    var randomIndexes      = [];
 
     var desiredRandomPowerups = utils.getRandomInt(
       (Math.floor(this.totalDestroyableBlock * (10 / 100))), 
       (Math.floor(this.totalDestroyableBlock * (40 / 100)))
     );
-    console.log('desiredRandomPowerups: ' + desiredRandomPowerups);
 
     // Total amount of tiles
     this.totalPowerUps = this.powerUpsName.length;
@@ -58,12 +59,10 @@ Powerups = Class.extend({
       }
     };
 
-    // Get the total drop chance value
-    $.each(dropChance,function() {
-      totalDropChance += this;
-    });
+    // Calculate the total added drop chance value.
+    totalDropChance = this.checkTotal(dropChance);
 
-    // Give the exact drop rate based on the total drop chance
+    // Calculate the drop rate based on the total drop chance value.
     for (var j = 0; j < powerupsClasses.length; j++) {
       accurateDropChance = powerupsClasses[j].getDropChance() / totalDropChance;
       itemDrops = Math.floor(accurateDropChance * desiredRandomPowerups);
@@ -71,35 +70,70 @@ Powerups = Class.extend({
       dropItem.push(itemDrops);
     };
 
-    // Get the total drop chance value
-    $.each(dropItem,function() {
-      totalDropItem += this;
-    });
+    // Calculate how many items have been added to the total drop item. 
+    totalDropItem = this.checkTotal(dropItem);
 
-    if (totalDropItem < desiredRandomPowerups) {
-      canBeAdded = desiredRandomPowerups - totalDropItem;
-    }
+    /*Check the total drop item against the desired total powerups, 
+    as rounding up numbers when calculating the drop rate mean that
+    we might not have added enough items.*/ 
+    canBeAdded = this.checkCanBeAdded(totalDropItem, desiredRandomPowerups);
 
-    // // Add more drop items to the total
-    for (var z = 0; z < this.powerUpsName.length; z++) {
-      for (var key in this.powerUpsName[z]) {
-        if (key != 'tile') {
-          if (canBeAdded > 1) {
-            var currentDrop = this.powerUpsName[z][key].getDropItem();
-            if (currentDrop < 1) {
-              this.powerUpsName[z][key].setDropItem(currentDrop + 1);
-            }
-            canBeAdded--;
+    // Add drop items to the total, when none have been added 
+    for (var k = 0; k < powerupsClasses.length; k++) {
+      if (canBeAdded > 0) {
+        var currentDrop = powerupsClasses[k].getDropItem();
+        if (currentDrop < 1) {
+          var addUpItem = 1;
+          powerupsClasses[k].setDropItem(currentDrop + addUpItem);
+          dropItem.push(addUpItem);
+          canBeAdded--;
+        } 
+      }
+    };
+
+    totalDropItem = this.checkTotal(dropItem);
+
+    // Check if more power ups have to be added to the total
+    canBeAdded = this.checkCanBeAdded(totalDropItem, desiredRandomPowerups);
+
+    // Randomly pick up a power up to add it up
+    for (var z = 0; z < canBeAdded; z++) {
+      var randomPowerUps = utils.getRandomIntFromArray(powerupsClasses);
+      var currentDrop    = randomPowerUps.getDropItem();
+      var addUpItem      = 1;
+      randomPowerUps.setDropItem(currentDrop + addUpItem);
+      dropItem.push(addUpItem);
+    };
+
+    for (var w = 0; w < this.destroybleLayer.data.length; w++) {
+      if (this.destroybleLayer.data[w] > 0) {
+        availableTiles.push(w);
+      }
+    };
+
+    randomIndexes['index'] = [];
+    randomIndexes['type']  = [];
+
+    for (var i = 0; i < this.powerUpsName.length; i++) {
+      for (var key in this.powerUpsName[i]) {
+        for (var l = 0; l < powerupsClasses[i].getDropItem(); l++) {
+          desiredIndex = utils.getRandomIntFromArray(availableTiles);
+          if (randomIndexes['index'].indexOf(desiredIndex) > -1) l--;
+          else {
+            randomIndexes['index'].push(desiredIndex);
+            randomIndexes['type'].push(this.powerUpsName[i]['tile']);
           }
         }
       }
     };
 
-    // for (var z = 0; z < this.destroybleLayer.data.length; z++) {
-    //   if (this.destroybleLayer.data[z] > 0) {
-    //     // this.layer.data[z] = 5;
-    //   }
-    // };
+    // Add the value of 'randomIndexes' to the current layer data
+    for (var value in randomIndexes) {
+      for (var z = 0; z < randomIndexes['index'].length; z++) {
+        console.log(randomIndexes['index'][z])
+        this.layer.data[randomIndexes['index'][z]] = randomIndexes['type'][z];
+      };
+    }
   },
 
   getTotalPowerUps: function() {
@@ -108,5 +142,15 @@ Powerups = Class.extend({
 
   getCurrentLayer: function() {
     return this.layer;
+  },
+
+  checkTotal: function(array) {
+    return utils.addNumbersInArray(array);
+  },
+
+  checkCanBeAdded: function(currentNbr, desiredNbr) {
+    if (currentNbr < desiredNbr) {
+      return (desiredNbr - currentNbr);
+    } else return 0;
   }
 });

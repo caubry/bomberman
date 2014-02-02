@@ -100,24 +100,24 @@ Map = Class.extend({
                 gameElement.push(w);
             }
             else currentLayer.data[w] = game.map.dataNames['none'];
-          }
+          };
 
           // Remove the safe zone areas from the destroyable blocks
           for (var j = 0; j < safeZonesTiles.length; j++) {
             gameElement.splice(gameElement.indexOf(safeZonesTiles[j]), 1);
-          }
+          };
 
           // Grab a random tile on every possible destroyable block
           for (var i = 0; i < currentMaxDestroyableBlock; i++) {
               desiredIndex = utils.getRandomIntFromArray(gameElement);
               if (randomIndexesArray.indexOf(desiredIndex) > -1) i--;
               else randomIndexesArray.push(desiredIndex);
-          }
+          };
 
           // Add the value of 'destroyable block' to the current layer data
           for (var z = 0; z < randomIndexesArray.length; z++) {
             currentLayer.data[randomIndexesArray[z]] = game.map.dataNames['destroyable_block'];
-          }
+          };
           // game.map.drawTiles(currentLayer);
         }
         break;

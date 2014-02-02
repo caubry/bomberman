@@ -16,11 +16,23 @@ Utils = Class.extend({
   },
 
   /**
-  * Uppercase the first letter of a given String
+  * Uppercase the first letter of a given String.
   */
   capitaliseFirstLetter: function(str) {
     return str.replace(/^./, function(txt) {
       return txt.toUpperCase();
     });
+  },
+
+  /**
+  * Parse an array of numbers and
+  * return the total value.
+  */
+  addNumbersInArray: function(array) {
+    var total = 0;
+    $.each(array,function() {
+      total += this;
+    });
+    return total;
   }
 });
