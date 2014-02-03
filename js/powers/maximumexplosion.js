@@ -4,7 +4,7 @@ MaximumExplosion = PowerEntity.extend({
 
   init: function() {
     this._super();
-	},
+  },
 
 	setDropItem: function(dropNumber) {
     this.dropNumber = dropNumber;
