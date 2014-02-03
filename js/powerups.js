@@ -130,7 +130,6 @@ Powerups = Class.extend({
     // Add the value of 'randomIndexes' to the current layer data
     for (var value in randomIndexes) {
       for (var z = 0; z < randomIndexes['index'].length; z++) {
-        console.log(randomIndexes['index'][z])
         this.layer.data[randomIndexes['index'][z]] = randomIndexes['type'][z];
       };
     }

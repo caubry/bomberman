@@ -42,6 +42,12 @@ Map = Class.extend({
     }
   },
 
+  drawToMap: function(mapLayers) {
+    game.map.drawTiles(mapLayers[game.map.STATIC_BLOCK]);
+    game.map.drawTiles(mapLayers[game.map.POWER_UPS]);
+    game.map.drawTiles(mapLayers[game.map.DESPICABLE_BLOCK]);
+  },
+
   /**
   * Iterate the layers and render each one
   */
@@ -76,7 +82,6 @@ Map = Class.extend({
               currentLayer.data[i] = game.map.dataNames['green_block'];
             }
           }
-          game.map.drawTiles(currentLayer);
         }
         break;
         case game.map.DESPICABLE_BLOCK: {
@@ -118,7 +123,6 @@ Map = Class.extend({
           for (var z = 0; z < randomIndexesArray.length; z++) {
             currentLayer.data[randomIndexesArray[z]] = game.map.dataNames['destroyable_block'];
           };
-          // game.map.drawTiles(currentLayer);
         }
         break;
         case game.map.POWER_UPS: {
@@ -126,8 +130,7 @@ Map = Class.extend({
           // Generate and draw powerups on top of the 'green' tiles
           game.map.powerups = new Powerups(mapLayers[game.map.POWER_UPS], mapLayers[game.map.DESPICABLE_BLOCK], currentMaxDestroyableBlock);
           game.map.powerups.setup();
-          // this.dataNames['power_ups'] = game.map.powerups
-          game.map.drawTiles(game.map.powerups.getCurrentLayer());
+          mapLayers[game.map.POWER_UPS] = game.map.powerups.getCurrentLayer();
         }
         break;
         case game.map.DESPICABLE_COLLISION: {
@@ -137,6 +140,7 @@ Map = Class.extend({
         break;
       }
     }
+    this.drawToMap(mapLayers);
   },
 
   /**
@@ -153,9 +157,9 @@ Map = Class.extend({
   * Parse a JSON file created with Tile Map Editor 
   * and load the tileset.
   */
-  load: function(name) {
+  load: function(jsonFile) {
     var _this = this;
-    $.getJSON(config.MAP_DATA, function(data) {
+    $.getJSON(jsonFile, function(data) {
       _this.loadTileset(data);
     });
   }
