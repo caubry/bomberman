@@ -12,7 +12,7 @@ var config = {
   GAME_CONTENT_ID   : "gameContent",
   GAME_CANVAS_ID    : "gameCanvas",
 
-  MAP_DATA			: "/bomberman/data/map/map-level1.json",
-  PLAYER_DATA		: "/bomberman/data/map/character.json",
+  MAP_DATA			: "data/map/map-level1.json",
+  PLAYER_DATA		: "data/map/character.json",
 
 };
