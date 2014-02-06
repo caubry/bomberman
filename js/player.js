@@ -3,22 +3,11 @@ Player = Class.extend({
   sprites: [],
   frames: [],
   img: null,
+  imageMap: {},
+  atlasImage:null,
 
-  renderLayers: function(frames) {
-    frames = $.isArray(frames) ? frames : this.data.frames;
-
-    for(var key in frames) {
-      sprite = frames[key];
-      cx     = -sprite.frame.w * 0.5;
-      cy     = -sprite.frame.h * 0.5;
-
-      if (sprite.trimmed) {
-        cx = sprite.spriteSourceSize.x - sprite.sourceSize.w * 0.5;
-        cy = sprite.spriteSourceSize.y - sprite.sourceSize.h * 0.5;
-      }
-
-      this.defSprite(sprite.filename, sprite.frame.x, sprite.frame.y, sprite.frame.w, sprite.frame.h, cx, cy);
-    };
+  getImageData: function(filename) {
+    return this.imageMap[filename];
   },
 
   defSprite: function (name, x, y, w, h, cx, cy) {
@@ -35,11 +24,33 @@ Player = Class.extend({
     this.drawSprite(spt.id, spt.x, spt.y);
   },
 
-  loadPlayer: function(data) { 
-    var sprite, cx, cy;
+  setImageData: function(filename, data) {
+    var frame = data.frame;
+    var cx, cy;
+
+    cx     = -frame.w * 0.5;
+    cy     = -frame.h * 0.5;
+
+    if (data.trimmed) {
+      cx = data.spriteSourceSize.x - data.sourceSize.w * 0.5;
+      cy = data.spriteSourceSize.y - data.sourceSize.h * 0.5;
+    }
+
+    this.defSprite(filename, frame.x, frame.y, frame.w, frame.h, cx, cy);
+  },
+
+  onAtlasLoaded: function(frames) {
+    frames = $.isArray(frames) ? frames : this.data.frames;
+    for (var filename in frames) {
+      this.setImageData(filename, frames[filename]);
+    }
+  },
+
+  loadPlayer: function(data) {
     this.data = data;
-    this.sheet = $("<img />", { src: data.meta.image })[0]
-    this.sheet.onload = $.proxy(this.renderLayers, this);
+    this.atlasImage = new Image();
+    this.atlasImage.src = data.meta.image;
+    this.atlasImage.onload = $.proxy(this.onAtlasLoaded, this);
   },
 
   load: function(jsonFile) {
@@ -60,20 +71,16 @@ Player = Class.extend({
 
   drawSprite: function(spritename, posX, posY) {
     var sprite = this.getStats(spritename);
-    var img = new Image();
-    img.src = this.sheet.src;
-    this.img  = img;
-    this.__drawSpriteInternal(sprite, this.img, posX, posY);
+    this.__drawSpriteInternal(sprite, this.atlasImage, posX, posY);
     return;
   },
 
   __drawSpriteInternal: function(spt, sheet, posX, posY) {
-    // console.log('MOVE')
     var hlf = {
       x: spt.cx,
       y: spt.cy
     };
-    console.log(spt.x)
-    game.ctx.drawImage(this.sheet, spt.x, spt.y, spt.w, spt.h, posX + hlf.x, posY + hlf.y, spt.w, spt.h);
+    
+    game.ctx.drawImage(sheet, spt.x, spt.y, spt.w, spt.h, posX + hlf.x, posY + hlf.y, spt.w, spt.h);
   }
 });
