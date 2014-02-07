@@ -1,26 +1,46 @@
 Player = Class.extend({
 
-  sprites: [],
-  frames: [],
-  img: null,
+  sprites: {},
+  atlasImage:null,
 
-  renderLayers: function(frames) {
-    frames = $.isArray(frames) ? frames : this.data.frames;
+  /**
+  * Parse a JSON file created with the TexturePacker tool
+  * and load the atlas.
+  */
+  load: function(jsonFile) {
+    var _this = this;
+    $.getJSON(jsonFile, function(data) {
+      _this.loadPlayer(data);
+    });
+  },
 
-    for(var key in frames) {
-      sprite = frames[key];
-      cx     = -sprite.frame.w * 0.5;
-      cy     = -sprite.frame.h * 0.5;
+  /**
+  * Draw on canvas
+  */
+  draw: function(name, xPos, yPos) {
+    var currentImage;
+    var hlf;
+    var scaleX = 1.8;
+    var scaleY = 1.8;
 
-      if (sprite.trimmed) {
-        cx = sprite.spriteSourceSize.x - sprite.sourceSize.w * 0.5;
-        cy = sprite.spriteSourceSize.y - sprite.sourceSize.h * 0.5;
-      }
+    for (var key in this.sprites[name]) {
+      currentImage = this.sprites[name][key];
 
-      this.defSprite(sprite.filename, sprite.frame.x, sprite.frame.y, sprite.frame.w, sprite.frame.h, cx, cy);
+      hlf = {
+        x: currentImage.cx,
+        y: currentImage.cy
+      };
+
+      game.ctx.drawImage(this.atlasImage, currentImage.x, currentImage.y, 
+        currentImage.w, currentImage.h, xPos, yPos, 
+        currentImage.w * scaleX, currentImage.h * scaleY
+      );
     };
   },
 
+  /**
+  * Define sprites properties
+  */
   defSprite: function (name, x, y, w, h, cx, cy) {
     var spt = {
       "id": name,
@@ -31,49 +51,50 @@ Player = Class.extend({
       "cx": cx === null ? 0 : cx,
       "cy": cy === null ? 0 : cy
     };
-    this.sprites.push(spt);
-    this.drawSprite(spt.id, spt.x, spt.y);
+
+    this.sprites[spt.id] = [];
+    this.sprites[spt.id].push(spt);
   },
 
-  loadPlayer: function(data) { 
-    var sprite, cx, cy;
-    this.data = data;
-    this.sheet = $("<img />", { src: data.meta.image })[0]
-    this.sheet.onload = $.proxy(this.renderLayers, this);
-  },
+  /**
+  * Calculate the x and y coordinates 
+  * of the center of the sprite
+  */
+  setImageData: function(filename, data) {
+    var frame = data.frame;
+    var cx, cy;
 
-  load: function(jsonFile) {
-    var _this = this;
-    $.getJSON(jsonFile, function(data) {
-      _this.loadPlayer(data);
-    });
-  },
+    cx = -frame.w * 0.5;
+    cy = -frame.h * 0.5;
 
-  getStats: function (name) {
-    for(var i = 0; i < this.sprites.length; i++) {
-        if(this.sprites[i].id === name) {
-          return this.sprites[i];
-        }
+    if (data.trimmed) {
+      cx = data.spriteSourceSize.x - data.sourceSize.w * 0.5;
+      cy = data.spriteSourceSize.y - data.sourceSize.h * 0.5;
     }
-    return null;
+    // Remove image extension from the filename
+    var newFilename = data.filename.substr(0, data.filename.lastIndexOf('.'));
+    this.defSprite(newFilename, frame.x, frame.y, frame.w, frame.h, cx, cy);
   },
 
-  drawSprite: function(spritename, posX, posY) {
-    var sprite = this.getStats(spritename);
-    var img = new Image();
-    img.src = this.sheet.src;
-    this.img  = img;
-    this.__drawSpriteInternal(sprite, this.img, posX, posY);
-    return;
-  },
-
-  __drawSpriteInternal: function(spt, sheet, posX, posY) {
-    // console.log('MOVE')
-    var hlf = {
-      x: spt.cx,
-      y: spt.cy
+  /**
+  * Create an image for the atlas
+  */
+  onAtlasLoaded: function(frames) {
+    frames = $.isArray(frames) ? frames : this.data.frames;
+    for (var filename in frames) {
+      this.setImageData(filename, frames[filename]);
     };
-    console.log(spt.x)
-    game.ctx.drawImage(this.sheet, spt.x, spt.y, spt.w, spt.h, posX + hlf.x, posY + hlf.y, spt.w, spt.h);
+    /*TODO: Normalise player position with tiles
+    and store image name*/ 
+    this.draw('Player1_Walk_Front1', 38, 30);
+  },
+
+  /**
+  * Create an image for the atlas
+  */
+  loadPlayer: function(data) {
+    this.data = data;
+    this.atlasImage = $("<img />", { src: data.meta.image })[0]
+    this.atlasImage.onload = $.proxy(this.onAtlasLoaded, this);
   }
 });
