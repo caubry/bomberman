@@ -32,7 +32,7 @@ Player = Class.extend({
       };
 
       game.ctx.drawImage(this.atlasImage, currentImage.x, currentImage.y, 
-        currentImage.w, currentImage.h, xPos, yPos, 
+        currentImage.w, currentImage.h, xPos + hlf.x, yPos + hlf.y, 
         currentImage.w * scaleX, currentImage.h * scaleY
       );
     };
@@ -86,7 +86,7 @@ Player = Class.extend({
     };
     /*TODO: Normalise player position with tiles
     and store image name*/ 
-    this.draw('Player1_Walk_Front1', 38, 30);
+    this.draw('Player1_Walk_Front1', 48, 32);
   },
 
   /**
