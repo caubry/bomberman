@@ -1,15 +1,46 @@
 Player = Class.extend({
 
-  sprites: [],
-  frames: [],
-  img: null,
-  imageMap: {},
+  sprites: {},
   atlasImage:null,
 
-  getImageData: function(filename) {
-    return this.imageMap[filename];
+  /**
+  * Parse a JSON file created with the TexturePacker tool
+  * and load the atlas.
+  */
+  load: function(jsonFile) {
+    var _this = this;
+    $.getJSON(jsonFile, function(data) {
+      _this.loadPlayer(data);
+    });
   },
 
+  /**
+  * Draw on canvas
+  */
+  draw: function(name, xPos, yPos) {
+    var currentImage;
+    var hlf;
+    var scaleX = 1.8;
+    var scaleY = 1.8;
+
+    for (var key in this.sprites[name]) {
+      currentImage = this.sprites[name][key];
+
+      hlf = {
+        x: currentImage.cx,
+        y: currentImage.cy
+      };
+
+      game.ctx.drawImage(this.atlasImage, currentImage.x, currentImage.y, 
+        currentImage.w, currentImage.h, xPos, yPos, 
+        currentImage.w * scaleX, currentImage.h * scaleY
+      );
+    };
+  },
+
+  /**
+  * Define sprites properties
+  */
   defSprite: function (name, x, y, w, h, cx, cy) {
     var spt = {
       "id": name,
@@ -20,67 +51,50 @@ Player = Class.extend({
       "cx": cx === null ? 0 : cx,
       "cy": cy === null ? 0 : cy
     };
-    this.sprites.push(spt);
-    this.drawSprite(spt.id, spt.x, spt.y);
+
+    this.sprites[spt.id] = [];
+    this.sprites[spt.id].push(spt);
   },
 
+  /**
+  * Calculate the x and y coordinates 
+  * of the center of the sprite
+  */
   setImageData: function(filename, data) {
     var frame = data.frame;
     var cx, cy;
 
-    cx     = -frame.w * 0.5;
-    cy     = -frame.h * 0.5;
+    cx = -frame.w * 0.5;
+    cy = -frame.h * 0.5;
 
     if (data.trimmed) {
       cx = data.spriteSourceSize.x - data.sourceSize.w * 0.5;
       cy = data.spriteSourceSize.y - data.sourceSize.h * 0.5;
     }
-
-    this.defSprite(filename, frame.x, frame.y, frame.w, frame.h, cx, cy);
+    // Remove image extension from the filename
+    var newFilename = data.filename.substr(0, data.filename.lastIndexOf('.'));
+    this.defSprite(newFilename, frame.x, frame.y, frame.w, frame.h, cx, cy);
   },
 
+  /**
+  * Create an image for the atlas
+  */
   onAtlasLoaded: function(frames) {
     frames = $.isArray(frames) ? frames : this.data.frames;
     for (var filename in frames) {
       this.setImageData(filename, frames[filename]);
-    }
+    };
+    /*TODO: Normalise player position with tiles
+    and store image name*/ 
+    this.draw('Player1_Walk_Front1', 38, 30);
   },
 
+  /**
+  * Create an image for the atlas
+  */
   loadPlayer: function(data) {
     this.data = data;
-    this.atlasImage = new Image();
-    this.atlasImage.src = data.meta.image;
+    this.atlasImage = $("<img />", { src: data.meta.image })[0]
     this.atlasImage.onload = $.proxy(this.onAtlasLoaded, this);
-  },
-
-  load: function(jsonFile) {
-    var _this = this;
-    $.getJSON(jsonFile, function(data) {
-      _this.loadPlayer(data);
-    });
-  },
-
-  getStats: function (name) {
-    for(var i = 0; i < this.sprites.length; i++) {
-        if(this.sprites[i].id === name) {
-          return this.sprites[i];
-        }
-    }
-    return null;
-  },
-
-  drawSprite: function(spritename, posX, posY) {
-    var sprite = this.getStats(spritename);
-    this.__drawSpriteInternal(sprite, this.atlasImage, posX, posY);
-    return;
-  },
-
-  __drawSpriteInternal: function(spt, sheet, posX, posY) {
-    var hlf = {
-      x: spt.cx,
-      y: spt.cy
-    };
-    
-    game.ctx.drawImage(sheet, spt.x, spt.y, spt.w, spt.h, posX + hlf.x, posY + hlf.y, spt.w, spt.h);
   }
 });
