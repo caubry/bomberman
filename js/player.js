@@ -36,6 +36,15 @@ Player = Class.extend({
         currentImage.w * scaleX, currentImage.h * scaleY
       );
     };
+
+    // this.listenInput();
+  },
+
+  listenInput: function() {
+    for (var key in game.inputEngine.actions) {
+      console.log(key)
+    }
+
   },
 
   /**
