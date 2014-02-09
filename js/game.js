@@ -14,27 +14,30 @@ Game = Class.extend({
 
     mediator.create(mediatorEvent.KEY_DOWN, this.onKeyDown);
     mediator.create(mediatorEvent.KEY_UP, this.onKeyUp);
+    // mediator.create(mediatorEvent.TILES_LOADED, this.tilesLoaded);
   },
 
   setup: function() {
     this.inputEngine = new InputEngine();
-    // this.map         = new Map();
     this.loadTiles = new LoadTiles();
     // this.loadTexture = new LoadTexture();
 
     this.inputEngine.setup();
-    // this.map.load(config.MAP_DATA);
     // this.loadTexture.load(config.PLAYER_DATA);
     this.loadTiles.setup(config.MAP_DATA);
+    this.drawTiles.setup(game.loadTiles.data, this.mapLayers, this.tileset);
+
+  },
+
+  tilesLoaded: function(data) {
+    console.log(data);  
   },
 
   onKeyDown: function(keyCode) {
-    // game.map.redraw();
     // game.loadTexture.move(keyCode.data);
   },
 
   onKeyUp: function(keyCode) {
-    // game.map.redraw();  
     // game.loadTexture.onKeyUp(keyCode.data);
   }
 });

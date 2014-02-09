@@ -109,8 +109,8 @@ LoadTiles = Class.extend({
         break;
       }
     }
-    this.drawTiles = new DrawTiles();
-    this.drawTiles.setup(this.mapLayers, game.loadTiles.data, this.tileset);
+    var test = {game.loadTiles.data, this.mapLayers, this.tileset};
+    mediator.call(mediatorEvent.TILES_LOADED, test);
   },
 
   /**
