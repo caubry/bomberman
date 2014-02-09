@@ -26,7 +26,7 @@
 },
 {
 	"filename": "Player1_Walk_Front1.png",
-	"frame": {"x":2,"y":27,"w":18,"h":24},
+	"frame": {"x":2,"y":26,"w":18,"h":24},
 	"rotated": false,
 	"trimmed": true,
 	"spriteSourceSize": {"x":2,"y":7,"w":18,"h":24},
@@ -34,7 +34,7 @@
 },
 {
 	"filename": "Player1_Walk_Front2.png",
-	"frame": {"x":22,"y":29,"w":17,"h":25},
+	"frame": {"x":20,"y":26,"w":17,"h":25},
 	"rotated": false,
 	"trimmed": true,
 	"spriteSourceSize": {"x":7,"y":6,"w":17,"h":25},
@@ -42,7 +42,7 @@
 },
 {
 	"filename": "Player1_Walk_Front3.png",
-	"frame": {"x":41,"y":29,"w":18,"h":25},
+	"frame": {"x":37,"y":26,"w":18,"h":25},
 	"rotated": false,
 	"trimmed": true,
 	"spriteSourceSize": {"x":4,"y":4,"w":18,"h":25},

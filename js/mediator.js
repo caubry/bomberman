@@ -1,13 +1,14 @@
 Mediator = Class.extend({
   registeredEvent: {},
 
-  call: function(eventName) {
-    document.dispatchEvent(this.registeredEvent[eventName]);
+  call: function(eventName, data) {
+    var myEvent  = this.registeredEvent[eventName];
+    myEvent.data = data;
+    document.dispatchEvent(myEvent);
   },
 
   create: function(eventName, callback) {
     var myEvent = new CustomEvent(eventName, {
-      detail: {},
       bubbles: true,
       cancelable: true
     });

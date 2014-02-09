@@ -2,6 +2,7 @@ Map = Class.extend({
 
   layers: [],
   powerups: null,
+  mapLayers: {},
 
   // Layers named from the json file
   STATIC_BLOCK          : "static-blocks",
@@ -42,6 +43,10 @@ Map = Class.extend({
     }
   },
 
+  redraw: function() {
+    this.drawToMap(this.mapLayers)
+  },
+
   drawToMap: function(mapLayers) {
     game.map.drawTiles(mapLayers[game.map.STATIC_BLOCK]);
     game.map.drawTiles(mapLayers[game.map.POWER_UPS]);
@@ -59,8 +64,6 @@ Map = Class.extend({
     var safeZonesTiles  = [];
     // Store areas where blocks and power-ups can be placed
     var gameElement     = [];
-    // Store the different layers
-    var mapLayers = {};
     // Total of destroyable blocks
     var currentMaxDestroyableBlock;
 
@@ -69,7 +72,7 @@ Map = Class.extend({
 
       switch(currentLayer['name']) {
         case game.map.STATIC_BLOCK: {
-          mapLayers[game.map.STATIC_BLOCK] = currentLayer;
+          this.mapLayers[game.map.STATIC_BLOCK] = currentLayer;
 
           /*Grab the 'green' tiles data, save the safe areas
           and add green tiles on top of these safe areas*/
@@ -85,9 +88,9 @@ Map = Class.extend({
         }
         break;
         case game.map.DESPICABLE_BLOCK: {
-          mapLayers[game.map.DESPICABLE_BLOCK] = currentLayer;
+          this.mapLayers[game.map.DESPICABLE_BLOCK] = currentLayer;
 
-          var staticLayer        = mapLayers[game.map.STATIC_BLOCK];
+          var staticLayer        = this.mapLayers[game.map.STATIC_BLOCK];
           var randomIndexesArray = [];
           var desiredIndex;
           
@@ -126,21 +129,21 @@ Map = Class.extend({
         }
         break;
         case game.map.POWER_UPS: {
-          mapLayers[game.map.POWER_UPS] = currentLayer;
+          this.mapLayers[game.map.POWER_UPS] = currentLayer;
           // Generate and draw powerups on top of the 'green' tiles
-          game.map.powerups = new Powerups(mapLayers[game.map.POWER_UPS], mapLayers[game.map.DESPICABLE_BLOCK], currentMaxDestroyableBlock);
+          game.map.powerups = new Powerups(this.mapLayers[game.map.POWER_UPS], this.mapLayers[game.map.DESPICABLE_BLOCK], currentMaxDestroyableBlock);
           game.map.powerups.setup();
-          mapLayers[game.map.POWER_UPS] = game.map.powerups.getCurrentLayer();
+          this.mapLayers[game.map.POWER_UPS] = game.map.powerups.getCurrentLayer();
         }
         break;
         case game.map.DESPICABLE_COLLISION: {
-          mapLayers[game.map.DESPICABLE_COLLISION] = currentLayer;
+          this.mapLayers[game.map.DESPICABLE_COLLISION] = currentLayer;
           console.log('despicable-collision')
         }
         break;
       }
     }
-    this.drawToMap(mapLayers);
+    this.drawToMap(this.mapLayers);
   },
 
   /**

@@ -24,7 +24,7 @@ InputEngine = Class.extend({
     var action = game.inputEngine.bindings[e.keyCode];
     if (action) {
       game.inputEngine.actions[action] = true;
-      mediator.call(mediatorEvent.KEY_DOWN);      
+      mediator.call(mediatorEvent.KEY_DOWN, action);      
     }
   },
 
@@ -32,7 +32,7 @@ InputEngine = Class.extend({
     var action = game.inputEngine.bindings[e.keyCode];
     if (action) {
       game.inputEngine.actions[action] = false;
-      mediator.call(mediatorEvent.KEY_UP);   
+      mediator.call(mediatorEvent.KEY_UP, action);   
     }   
   },
 

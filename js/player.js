@@ -2,6 +2,17 @@ Player = Class.extend({
 
   sprites: {},
   atlasImage:null,
+  xSpeed: 48,
+  ySpeed: 32,
+  keyPress: 0,
+  movement: {
+    RIGHT: 'move-right',
+    LEFT: 'move-left',
+    UP: 'move-up',
+    DOWN: 'move-down'
+  },
+  i: 1,
+  currentPlayerWalkFront: null,
 
   /**
   * Parse a JSON file created with the TexturePacker tool
@@ -36,8 +47,37 @@ Player = Class.extend({
         currentImage.w * scaleX, currentImage.h * scaleY
       );
     };
+  },
 
-    // this.listenInput();
+  /**
+  * Move character around the map
+  */
+  move: function(movement) {
+    if (movement === this.movement.RIGHT) {
+      this.xSpeed++;
+    } else if (movement === this.movement.LEFT) {
+      this.xSpeed--;
+    }
+    if (movement === this.movement.UP) {
+      this.ySpeed--;
+    } else if (movement === this.movement.DOWN) {
+      this.ySpeed += 2;
+      if (this.keyPress > 3) {
+        if (this.i > 2) this.i = 1;
+        else this.i++;
+        this.keyPress = 0;
+      }
+      else this.keyPress++;
+      console.log(this.keyPressx)
+    }
+    this.currentPlayerWalkFront = 'Player1_Walk_Front' + this.i;
+    this.draw(this.currentPlayerWalkFront, this.xSpeed, this.ySpeed);
+  },
+
+  onKeyUp: function(movement) {
+    if (movement === this.movement.DOWN) {
+      this.draw('Player1_Walk_Front1', this.xSpeed, this.ySpeed);
+    }
   },
 
   listenInput: function() {

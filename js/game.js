@@ -11,8 +11,8 @@ Game = Class.extend({
     this.canvas = canvas;
     this.ctx    = this.canvas.getContext('2d');
 
-    mediator.create('KEY_DOWN', function(){console.log('KEY_DOWN')});
-    mediator.create('KEY_UP', function(){console.log('KEY_UP')});
+    mediator.create(mediatorEvent.KEY_DOWN, this.onKeyDown);
+    mediator.create(mediatorEvent.KEY_UP, this.onKeyUp);
   },
 
   setup: function() {
@@ -23,5 +23,15 @@ Game = Class.extend({
     this.inputEngine.setup();
     this.map.load(config.MAP_DATA);
     this.player.load(config.PLAYER_DATA);
+  },
+
+  onKeyDown: function(keyCode) {
+    game.map.redraw();
+    game.player.move(keyCode.data);
+  },
+
+  onKeyUp: function(keyCode) {
+    game.map.redraw();  
+    game.player.onKeyUp(keyCode.data);
   }
 });
