@@ -1,9 +1,10 @@
-Player = Class.extend({
+LoadTexture = Class.extend({
 
   sprites: {},
   atlasImage:null,
-  xSpeed: 48,
-  ySpeed: 32,
+  playerAction: {},
+  // xSpeed: 2,
+  // ySpeed: 2,
   keyPress: 0,
   movement: {
     RIGHT: 'move-right',
@@ -11,8 +12,6 @@ Player = Class.extend({
     UP: 'move-up',
     DOWN: 'move-down'
   },
-  i: 1,
-  currentPlayerWalkFront: null,
 
   /**
   * Parse a JSON file created with the TexturePacker tool
@@ -54,37 +53,36 @@ Player = Class.extend({
   */
   move: function(movement) {
     if (movement === this.movement.RIGHT) {
-      this.xSpeed++;
+      // this.xSpeed++;
     } else if (movement === this.movement.LEFT) {
-      this.xSpeed--;
+      // this.xSpeed--;
     }
     if (movement === this.movement.UP) {
-      this.ySpeed--;
+      // this.ySpeed--;
     } else if (movement === this.movement.DOWN) {
-      this.ySpeed += 2;
-      if (this.keyPress > 3) {
-        if (this.i > 2) this.i = 1;
-        else this.i++;
-        this.keyPress = 0;
+      // this.ySpeed += 2;
+      // Check the new player position
+      // for (var key in this.sprites['Player1_Walk_Front1']) {
+      // }
+
+      // Player x & y 
+      // utils.calculateDistance();
+      // if (this.keyPress > 3) {
+      //   if (this.i > 2) this.i = 1;
+      //   else this.i++;
+      //   this.keyPress = 0;
       }
-      else this.keyPress++;
-      console.log(this.keyPressx)
-    }
-    this.currentPlayerWalkFront = 'Player1_Walk_Front' + this.i;
-    this.draw(this.currentPlayerWalkFront, this.xSpeed, this.ySpeed);
+      // else this.keyPress++;
+      // console.log(this.keyPressx)
+    // }
+    // this.currentPlayerWalkFront = 'Player1_Walk_Front' + this.i;
+    // this.draw(this.currentPlayerWalkFront, this.xSpeed, this.ySpeed);
   },
 
   onKeyUp: function(movement) {
     if (movement === this.movement.DOWN) {
-      this.draw('Player1_Walk_Front1', this.xSpeed, this.ySpeed);
+      // this.draw('Player1_Walk_Front1', this.xSpeed, this.ySpeed);
     }
-  },
-
-  listenInput: function() {
-    for (var key in game.inputEngine.actions) {
-      console.log(key)
-    }
-
   },
 
   /**
@@ -121,8 +119,8 @@ Player = Class.extend({
       cy = data.spriteSourceSize.y - data.sourceSize.h * 0.5;
     }
     // Remove image extension from the filename
-    var newFilename = data.filename.substr(0, data.filename.lastIndexOf('.'));
-    this.defSprite(newFilename, frame.x, frame.y, frame.w, frame.h, cx, cy);
+    var actionName = data.filename.substr(0, data.filename.lastIndexOf('.'));
+    this.defSprite(actionName, frame.x, frame.y, frame.w, frame.h, cx, cy);
   },
 
   /**

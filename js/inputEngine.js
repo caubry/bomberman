@@ -11,6 +11,7 @@ InputEngine = Class.extend({
   setup: function () {
     var _this = this;
 
+    // WASD
     this.bind(87, 'move-up');
     this.bind(65, 'move-left');
     this.bind(83, 'move-down');

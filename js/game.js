@@ -3,7 +3,8 @@ Game = Class.extend({
   canvas: null,
   ctx: null,
   map: null,
-  player: null,
+  loadTiles: null,
+  loadTexture: null,
   inputEngine:null,
   SpriteSheetAtlas: null,
 
@@ -17,21 +18,23 @@ Game = Class.extend({
 
   setup: function() {
     this.inputEngine = new InputEngine();
-    this.map         = new Map();
-    this.player      = new Player();
+    // this.map         = new Map();
+    this.loadTiles = new LoadTiles();
+    // this.loadTexture = new LoadTexture();
 
     this.inputEngine.setup();
-    this.map.load(config.MAP_DATA);
-    this.player.load(config.PLAYER_DATA);
+    // this.map.load(config.MAP_DATA);
+    // this.loadTexture.load(config.PLAYER_DATA);
+    this.loadTiles.setup(config.MAP_DATA);
   },
 
   onKeyDown: function(keyCode) {
-    game.map.redraw();
-    game.player.move(keyCode.data);
+    // game.map.redraw();
+    // game.loadTexture.move(keyCode.data);
   },
 
   onKeyUp: function(keyCode) {
-    game.map.redraw();  
-    game.player.onKeyUp(keyCode.data);
+    // game.map.redraw();  
+    // game.loadTexture.onKeyUp(keyCode.data);
   }
 });
