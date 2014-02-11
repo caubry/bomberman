@@ -20,7 +20,7 @@ Game = Class.extend({
   },
 
   setup: function() {
-    this.mapLevel            = new MapLevel();
+    this.mapLevel       = new MapLevel();
     this.textureManager = new TextureManager();
     this.inputEngine    = new InputEngine();
 

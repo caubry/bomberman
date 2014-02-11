@@ -8,6 +8,7 @@
   "dependencies": {
     "grunt": "latest",
     "grunt-cli": "latest",
-    "grunt-contrib-jshint": "latest"
+    "grunt-contrib-jshint": "latest",
+    "grunt-githooks": "latest"
   }
 }

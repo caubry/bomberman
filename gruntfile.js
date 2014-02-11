@@ -12,12 +12,22 @@ module.exports = function(grunt) {
           document: true
         }
       }
+    },
+    githooks: {
+      all: {
+        options: {
+          template: 'hooks/pre-commit.js'
+        },
+        'pre-commit': 'test'
+      }
     }
   });
 
   // Load tasks
   grunt.loadNpmTasks('grunt-contrib-jshint');
+  grunt.loadNpmTasks('grunt-githooks');
 
   // Register tasks
   grunt.registerTask('default', ['jshint']);
+  grunt.registerTask('default', ['githooks', 'test']);
 }
