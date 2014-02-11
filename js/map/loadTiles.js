@@ -28,19 +28,19 @@ LoadTiles = Class.extend({
 
     for (var key in layers) {
       var currentLayer = layers[key];
-      switch(currentLayer['name']) {
+      switch(currentLayer.name) {
         case config.STATIC_BLOCK: {
           this.mapLayers[config.STATIC_BLOCK] = currentLayer;
 
           /*Grab the 'green' tiles data, save the safe areas
           and add green tiles on top of these safe areas*/
           for (var i = 0; i < currentLayer.data.length; i++) {
-            if (currentLayer.data[i] === game.map.loadTiles.dataNames['green_block']) {
+            if (currentLayer.data[i] === game.mapLevel.loadTiles.dataNames.green_block) {
               totalGreenTiles.push(currentLayer.data[i]);
             }
-            else if (currentLayer.data[i] === game.map.loadTiles.dataNames['none']) {
+            else if (currentLayer.data[i] === game.mapLevel.loadTiles.dataNames.none) {
               safeZonesTiles.push(i);
-              currentLayer.data[i] = game.map.loadTiles.dataNames['green_block'];
+              currentLayer.data[i] = game.mapLevel.loadTiles.dataNames.green_block;
             }
           }
         }
@@ -62,46 +62,46 @@ LoadTiles = Class.extend({
           /*Add the 'green' tile area to the destroyable blocks
           and remove any extra 'destroyable blocks' from the map*/
           for (var w = 0; w < staticLayer.data.length; w++) {
-            if (staticLayer.data[w] === game.map.loadTiles.dataNames['green_block']){
+            if (staticLayer.data[w] === game.mapLevel.loadTiles.dataNames.green_block){
                 gameElement.push(w);
             }
-            else currentLayer.data[w] = game.map.loadTiles.dataNames['none'];
-          };
+            else currentLayer.data[w] = game.mapLevel.loadTiles.dataNames.none;
+          }
 
           // Remove the safe zone areas from the destroyable blocks
           for (var j = 0; j < safeZonesTiles.length; j++) {
             gameElement.splice(gameElement.indexOf(safeZonesTiles[j]), 1);
-          };
+          }
 
           // Grab a random tile on every possible destroyable block
-          for (var i = 0; i < currentMaxDestroyableBlock; i++) {
+          for (var n = 0; n < currentMaxDestroyableBlock; n++) {
               desiredIndex = utils.getRandomIntFromArray(gameElement);
-              if (randomIndexesArray.indexOf(desiredIndex) > -1) i--;
+              if (randomIndexesArray.indexOf(desiredIndex) > -1) n--;
               else randomIndexesArray.push(desiredIndex);
-          };
+          }
 
           // Add the value of 'destroyable block' to the current layer data
           for (var z = 0; z < randomIndexesArray.length; z++) {
-            currentLayer.data[randomIndexesArray[z]] = game.map.loadTiles.dataNames['destroyable_block'];
-          };
+            currentLayer.data[randomIndexesArray[z]] = game.mapLevel.loadTiles.dataNames.destroyable_block;
+          }
         }
         break;
         case config.POWER_UPS: {
           this.mapLayers[config.POWER_UPS] = currentLayer;
           // Generate and draw powerups on top of the 'green' tiles
-          game.map.loadTiles.powerups = new Powerups(this.mapLayers[config.POWER_UPS], this.mapLayers[config.DESPICABLE_BLOCK], currentMaxDestroyableBlock);
-          game.map.loadTiles.powerups.setup();
-          this.mapLayers[config.POWER_UPS] = game.map.loadTiles.powerups.getCurrentLayer();
+          game.mapLevel.loadTiles.powerups = new Powerups(this.mapLayers[config.POWER_UPS], this.mapLayers[config.DESPICABLE_BLOCK], currentMaxDestroyableBlock);
+          game.mapLevel.loadTiles.powerups.setup();
+          this.mapLayers[config.POWER_UPS] = game.mapLevel.loadTiles.powerups.getCurrentLayer();
         }
         break;
         case config.DESPICABLE_COLLISION: {
           this.mapLayers[config.DESPICABLE_COLLISION] = currentLayer;
-          console.log('despicable-collision')
+          console.log('despicable-collision');
         }
         break;
       }
     }
-    mediator.call(mediatorEvent.TILES_LOADED, {data: game.map.loadTiles.data, layers: this.mapLayers, image: this.tileset});
+    mediator.call(mediatorEvent.TILES_LOADED, {data: game.mapLevel.loadTiles.data, layers: this.mapLayers, image: this.tileset});
   },
 
   /**
@@ -110,7 +110,7 @@ LoadTiles = Class.extend({
   */
   loadTileset: function(data) { 
     this.data = data;
-    this.tileset = $("<img />", { src: data.tilesets[0].image })[0]
+    this.tileset = $("<img />", { src: data.tilesets[0].image })[0];
     this.tileset.onload = $.proxy(this.parseTiles, this);
   },
 

@@ -50,14 +50,14 @@ Powerups = Class.extend({
           /*Capitalise the first letter only 
           to dynamically instantiate power-ups Classes*/
           var classDef = utils.capitaliseFirstLetter(key);
-          this.powerUpsName[i][key] = new window[classDef];
+          this.powerUpsName[i][key] = new window[classDef]();
           // Keep a track on the powerups Classes only
           powerupsClasses.push(this.powerUpsName[i][key]);
           // Keep a track on every power ups drop chance
           dropChance.push(this.powerUpsName[i][key].getDropChance());
         }
       }
-    };
+    }
 
     // Calculate the total added drop chance value.
     totalDropChance = this.checkTotal(dropChance);
@@ -68,7 +68,7 @@ Powerups = Class.extend({
       itemDrops = Math.floor(accurateDropChance * desiredRandomPowerups);
       powerupsClasses[j].setDropItem(itemDrops);
       dropItem.push(itemDrops);
-    };
+    }
 
     // Calculate how many items have been added to the total drop item. 
     totalDropItem = this.checkTotal(dropItem);
@@ -89,7 +89,7 @@ Powerups = Class.extend({
           canBeAdded--;
         } 
       }
-    };
+    }
 
     totalDropItem = this.checkTotal(dropItem);
 
@@ -99,39 +99,39 @@ Powerups = Class.extend({
     // Randomly pick up a power up to add it up
     for (var z = 0; z < canBeAdded; z++) {
       var randomPowerUps = utils.getRandomIntFromArray(powerupsClasses);
-      var currentDrop    = randomPowerUps.getDropItem();
-      var addUpItem      = 1;
-      randomPowerUps.setDropItem(currentDrop + addUpItem);
-      dropItem.push(addUpItem);
-    };
+      var dropItems      = randomPowerUps.getDropItem();
+      var addUp          = 1;
+      randomPowerUps.setDropItem(dropItems + addUp);
+      dropItem.push(addUp);
+    }
 
     for (var w = 0; w < this.destroybleLayer.data.length; w++) {
       if (this.destroybleLayer.data[w] > 0) {
         availableTiles.push(w);
       }
-    };
+    }
 
-    randomIndexes['index'] = [];
-    randomIndexes['type']  = [];
+    randomIndexes.index = [];
+    randomIndexes.type  = [];
 
-    for (var i = 0; i < this.powerUpsName.length; i++) {
-      for (var key in this.powerUpsName[i]) {
-        for (var l = 0; l < powerupsClasses[i].getDropItem(); l++) {
+    for (var o = 0; o < this.powerUpsName.length; o++) {
+      for (var items in this.powerUpsName[o]) {
+        for (var l = 0; l < powerupsClasses[o].getDropItem(); l++) {
           desiredIndex = utils.getRandomIntFromArray(availableTiles);
-          if (randomIndexes['index'].indexOf(desiredIndex) > -1) l--;
+          if (randomIndexes.index.indexOf(desiredIndex) > -1) l--;
           else {
-            randomIndexes['index'].push(desiredIndex);
-            randomIndexes['type'].push(this.powerUpsName[i]['tile']);
+            randomIndexes.index.push(desiredIndex);
+            randomIndexes.type.push(this.powerUpsName[o].tile);
           }
         }
       }
-    };
+    }
 
     // Add the value of 'randomIndexes' to the current layer data
     for (var value in randomIndexes) {
-      for (var z = 0; z < randomIndexes['index'].length; z++) {
-        this.layer.data[randomIndexes['index'][z]] = randomIndexes['type'][z];
-      };
+      for (var y = 0; y < randomIndexes.index.length; y++) {
+        this.layer.data[randomIndexes.index[y]] = randomIndexes.type[y];
+      }
     }
   },
 

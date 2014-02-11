@@ -30,7 +30,7 @@ PlayerManager = Class.extend({
             this.currentObject[currentArray[j]].push(name);
           }
         }
-      };
+      }
       return this.currentObject;
     } else {
       return null;

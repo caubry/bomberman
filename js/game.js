@@ -2,7 +2,7 @@ Game = Class.extend({
 
   canvas: null,
   ctx: null,
-  map: null,
+  mapLevel: null,
   textureManager:null,
   inputEngine:null,
   hasTiles: false,
@@ -20,18 +20,18 @@ Game = Class.extend({
   },
 
   setup: function() {
-    this.map            = new Map();
+    this.mapLevel            = new MapLevel();
     this.textureManager = new TextureManager();
     this.inputEngine    = new InputEngine();
 
-    this.map.setup();
+    this.mapLevel.setup();
     this.textureManager.setup();
     this.inputEngine.setup();
   },
 
   tilesLoaded: function(loadedMap) {
     mediator.create(game.canvas, mediatorEvent.TILES_RENDERED, game.tilesRendered);
-    game.map.tilesLoaded(loadedMap);
+    game.mapLevel.tilesLoaded(loadedMap);
     mediator.remove(game.canvas, mediatorEvent.TILES_LOADED, game.tilesLoaded);
   },
 

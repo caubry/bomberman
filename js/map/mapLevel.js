@@ -1,4 +1,4 @@
-Map = Class.extend({
+MapLevel = Class.extend({
     
   loadTiles: null,
   drawTiles: null,

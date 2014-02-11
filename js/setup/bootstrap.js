@@ -7,6 +7,7 @@ var game;
 var buildCanvas = function() {
   var canvas = document.createElement("canvas");
   // Error message for unsupported browsers.
+  /*jshint multistr: true */
   canvas.innerHTML  = "<p>Please upgrade your browser to support HTML5.</p> \
                        <p>One recommendation is to install the latest Chrome or Firefox.</p>";
   canvas.id     = config.GAME_CANVAS_ID;
@@ -37,6 +38,7 @@ var setup = function() {
       game = new Game(canvas);
       game.setup();
     } catch (e) {
+      /*jslint evil: true */  
       document.write(e);
     }
   }

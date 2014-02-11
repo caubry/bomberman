@@ -26,7 +26,7 @@ DrawTiles = Class.extend({
   drawToMap: function() {
     for (var i = 0; i < this.layersOrdered.length; i++) {
       this.draw(this.layer[this.layersOrdered[i]]);
-    };
+    }
 
     mediator.call(mediatorEvent.TILES_RENDERED);
   },

@@ -22,7 +22,7 @@ LoadTexture = Class.extend({
   parseJSON: function(data) {
     var atlasImage;
     this.data = data;
-    atlasImage = $("<img />", { src: data.meta.image })[0]
+    atlasImage = $("<img />", { src: data.meta.image })[0];
     atlasImage.onload = $.proxy(this.onAtlasLoaded, this);
   },
 
@@ -33,7 +33,7 @@ LoadTexture = Class.extend({
     frames = $.isArray(frames) ? frames : this.data.frames;
     for (var filename in frames) {
       this.setImageData(filename, frames[filename]);
-    };
+    }
     mediator.call(mediatorEvent.TEXTURE_LOADED, this.sprites);
   },
 

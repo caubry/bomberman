@@ -26,7 +26,7 @@ DrawPlayer = Class.extend({
         currentImage.w, currentImage.h, xPos + hlf.x, yPos + hlf.y, 
         currentImage.w * scaleX, currentImage.h * scaleY
       );
-    };
+    }
   },
 
   /**
