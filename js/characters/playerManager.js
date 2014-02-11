@@ -13,9 +13,9 @@ PlayerManager = Class.extend({
       var action       = name.split('_')[1];
       var movement     = name.split('_')[2].replace(/[0-9]/g, '');
 
-      console.log(this.getList(this.playerDirections, movement, name));
-      console.log(this.getList(this.playerAnim, action, name));
-      console.log(this.getList(this.playerNumberArray, playerNumber, name));
+      // console.log(this.getList(this.playerDirections, movement, name));
+      // console.log(this.getList(this.playerAnim, action, name));
+      // console.log(this.getList(this.playerNumberArray, playerNumber, name));
     }
   },
 

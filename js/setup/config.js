@@ -12,8 +12,8 @@ var config = {
   GAME_CONTENT_ID   : "gameContent",
   GAME_CANVAS_ID    : "gameCanvas",
 
-  MAP_DATA			: "data/map/map-level1.json",
-  TEXTURE_DATA	: "data/map/character.json",
+  MAP_DATA        : "data/map/map-level1.json",
+  TEXTURE_DATA    : "data/map/character.json",
 
   // Map layers
   STATIC_BLOCK          : "static-blocks",
