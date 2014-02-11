@@ -13,6 +13,12 @@ var config = {
   GAME_CANVAS_ID    : "gameCanvas",
 
   MAP_DATA			: "data/map/map-level1.json",
-  PLAYER_DATA		: "data/map/character.json",
+  TEXTURE_DATA	: "data/map/character.json",
+
+  // Map layers
+  STATIC_BLOCK          : "static-blocks",
+  DESPICABLE_BLOCK      : "despicable-block",
+  POWER_UPS             : "power-ups",
+  DESPICABLE_COLLISION  : "despicable-collision"
 
 };

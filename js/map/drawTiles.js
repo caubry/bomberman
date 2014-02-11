@@ -1,27 +1,34 @@
 DrawTiles = Class.extend({
 
   layers: [],
-  layer: [],
-  mapLayers: {},
-  tileset: null,
   data: null,
+  layer: null,
+  image: null,
 
-  // Layers named from the json file
-  STATIC_BLOCK          : "static-blocks",
-  DESPICABLE_BLOCK      : "despicable-block",
-  POWER_UPS             : "power-ups",
-  DESPICABLE_COLLISION  : "despicable-collision",
+  layersOrdered: [
+    config.STATIC_BLOCK,
+    config.POWER_UPS,
+    config.DESPICABLE_BLOCK
+  ],
 
-  setup: function(data, layer, tileset) {
-    this.tileset = tileset;
-    this.data    = data;
-    this.layer   = layer;
+  setup: function(loadedMap) {
+    this.data  = loadedMap.data;
+    this.layer = loadedMap.layers;
+    this.image = loadedMap.image;
 
     this.drawToMap();
   },
 
-  redraw: function() {
-    this.draw(this.layer[this.STATIC_BLOCK]);
+  redraw: function(layerName) {
+    this.draw(this.layer[layerName]);
+  },
+
+  drawToMap: function() {
+    for (var i = 0; i < this.layersOrdered.length; i++) {
+      this.draw(this.layer[this.layersOrdered[i]]);
+    };
+
+    mediator.call(mediatorEvent.TILES_RENDERED);
   },
 
   draw: function(layer) {
@@ -41,14 +48,8 @@ DrawTiles = Class.extend({
         s_x = (i % layer.width) * size;
         s_y = Math.floor(i / layer.width) * size;
 
-        game.ctx.drawImage(_this.tileset, img_x, img_y, size, size, s_x, s_y, size, size);
+        game.ctx.drawImage(_this.image, img_x, img_y, size, size, s_x, s_y, size, size);
       });
     }
   },
-
-  drawToMap: function() {
-    this.draw(this.layer[this.STATIC_BLOCK]);
-    this.draw(this.layer[this.POWER_UPS]);
-    this.draw(this.layer[this.DESPICABLE_BLOCK]);
-  }
 });
