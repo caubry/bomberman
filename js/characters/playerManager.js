@@ -52,7 +52,7 @@ PlayerManager = Class.extend({
 
     // Initialise drawing
     this.drawPlayer = new DrawPlayer(this.atlasName, this.scale);
-    this.drawPlayer.draw(this.playerSprite[1]['Walk']['Front'][0], this.positionOrigin.player_one);
+    this.drawPlayer.draw(this.playerSprite[1].Walk.Front[0], this.positionOrigin.player_one);
   },
 
   move: function(keyCode) {
@@ -98,7 +98,7 @@ PlayerManager = Class.extend({
       break; 
     }
 
-    this.drawPlayer.reDraw(this.playerSprite[1]['Walk']['Front'][this.currentFrame], this.positionOrigin.player_one);
+    this.drawPlayer.reDraw(this.playerSprite[1].Walk.Front[this.currentFrame], this.positionOrigin.player_one);
     this.savedTimer = this.moveTimer;
     // this.currentFrame++;
     // this.drawPlayer.draw(this.playerSprite[1]['Walk']['Front'][this.currentFrame], this.positionOrigin);
