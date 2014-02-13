@@ -27,7 +27,14 @@ var mediatorEvent = {
   /*@Params: sprite
   Called by LoadTexture, when JSON file has been parsed
   Retrieved by Game*/
-  TEXTURE_LOADED: 'onTextureLoaded'
+  TEXTURE_LOADED: 'onTextureLoaded',
+
+  // -----------------------------------------------------
+
+  /*@no Params
+  Called by DrawPlayer, when player has been rendered
+  Retrieved by Game*/
+  PLAYER_RENDERED: 'onPlayerRendered'
 
 };
 

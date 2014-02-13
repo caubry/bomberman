@@ -3,13 +3,13 @@ LoadTexture = Class.extend({
   sprites: {},
   playerAction: {},
   keyPress: 0,
-
+  atlasImage: null,
 
   /**
   * Parse a JSON file created with the TexturePacker tool
   * and load the atlas.
   */
-  setup: function(jsonFile) {
+  init: function(jsonFile) {
     var _this = this;
     $.getJSON(jsonFile, function(data) {
       _this.parseJSON(data);
@@ -20,10 +20,9 @@ LoadTexture = Class.extend({
   * Create an image for the atlas
   */
   parseJSON: function(data) {
-    var atlasImage;
     this.data = data;
-    atlasImage = $("<img />", { src: data.meta.image })[0];
-    atlasImage.onload = $.proxy(this.onAtlasLoaded, this);
+    this.atlasImage = $("<img />", { src: data.meta.image })[0];
+    this.atlasImage.onload = $.proxy(this.onAtlasLoaded, this);
   },
 
   /**
@@ -34,7 +33,7 @@ LoadTexture = Class.extend({
     for (var filename in frames) {
       this.setImageData(filename, frames[filename]);
     }
-    mediator.call(mediatorEvent.TEXTURE_LOADED, this.sprites);
+    mediator.call(mediatorEvent.TEXTURE_LOADED, {sprites: this.sprites, atlasName: this.atlasImage});
   },
 
   /**

@@ -5,7 +5,7 @@ var config = {
 
   STAGE_WIDTH       : 525,
   STAGE_HEIGHT      : 455,
-  FPS               : 30,
+  FPS               : 33, // 30 FPS
   GAME_FONTS        : "bold 20px sans-serif",
   
   // Canvas wrapper that also includes UI elements.
@@ -19,6 +19,12 @@ var config = {
   STATIC_BLOCK          : "static-blocks",
   DESPICABLE_BLOCK      : "despicable-block",
   POWER_UPS             : "power-ups",
-  DESPICABLE_COLLISION  : "despicable-collision"
+  DESPICABLE_COLLISION  : "despicable-collision",
+
+  // User input
+  PLAYER_UP       : 'move-up',
+  PLAYER_LEFT     : 'move-left',
+  PLAYER_DOWN     : 'move-down',
+  PLAYER_RIGHT    : 'move-right'
 
 };

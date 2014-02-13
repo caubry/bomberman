@@ -14,19 +14,12 @@ Game = Class.extend({
     // Loaders
     mediator.create(this.canvas, mediatorEvent.TILES_LOADED, this.tilesLoaded);
     mediator.create(this.canvas, mediatorEvent.TEXTURE_LOADED, this.textureLoaded);
-    // User Inputs
-    mediator.create(this.canvas, mediatorEvent.KEY_DOWN, this.onKeyDown);
-    mediator.create(this.canvas, mediatorEvent.KEY_UP, this.onKeyUp);
   },
 
   setup: function() {
     this.mapLevel       = new MapLevel();
     this.textureManager = new TextureManager();
     this.inputEngine    = new InputEngine();
-
-    this.mapLevel.setup();
-    this.textureManager.setup();
-    this.inputEngine.setup();
   },
 
   tilesLoaded: function(loadedMap) {
@@ -36,6 +29,8 @@ Game = Class.extend({
   },
 
   textureLoaded: function(loadedSprite) {
+    mediator.create(game.canvas, mediatorEvent.PLAYER_RENDERED, game.playerRendered);
+    // Only start drawing characters if the background has been rendered.
     if (game.hasTiles) game.textureManager.draw(loadedSprite);
     mediator.remove(game.canvas, mediatorEvent.TEXTURE_LOADED, game.textureLoaded);
   },
@@ -45,12 +40,23 @@ Game = Class.extend({
     mediator.remove(game.canvas, mediatorEvent.TILES_RENDERED, game.tilesRendered);
   },
 
+  playerRendered: function() {
+    // Add user inputs
+    mediator.create(game.canvas, mediatorEvent.KEY_DOWN, game.onKeyDown);
+    mediator.create(game.canvas, mediatorEvent.KEY_UP, game.onKeyUp);
+    mediator.remove(game.canvas, mediatorEvent.PLAYER_RENDERED, game.playerRendered);
+  },
+
   onKeyDown: function(keyCode) {
-    // game.loadTexture.move(keyCode.data);
+    // Just to test it out 
+    game.mapLevel.draw(config.STATIC_BLOCK);
+    game.mapLevel.draw(config.POWER_UPS);
+    game.mapLevel.draw(config.DESPICABLE_BLOCK);
+    game.textureManager.playerManager.move(keyCode);
   },
 
   onKeyUp: function(keyCode) {
-    // game.loadTexture.onKeyUp(keyCode.data);
+    game.textureManager.playerManager.unTick(keyCode);
   },
 
   removeEvents: function() {

@@ -13,6 +13,17 @@ LoadTiles = Class.extend({
   },
 
   /**
+  * Parse a JSON file created with Tile Map Editor 
+  * and load the tileset.
+  */
+  init: function(jsonFile) {
+    var _this = this;
+    $.getJSON(jsonFile, function(data) {
+      _this.loadTileset(data);
+    });
+  },
+
+  /**
   * Iterate the layers and render each one
   */
   parseTiles: function(layers) {
@@ -112,16 +123,6 @@ LoadTiles = Class.extend({
     this.data = data;
     this.tileset = $("<img />", { src: data.tilesets[0].image })[0];
     this.tileset.onload = $.proxy(this.parseTiles, this);
-  },
-
-  /**
-  * Parse a JSON file created with Tile Map Editor 
-  * and load the tileset.
-  */
-  setup: function(jsonFile) {
-    var _this = this;
-    $.getJSON(jsonFile, function(data) {
-      _this.loadTileset(data);
-    });
   }
+  
 });

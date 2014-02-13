@@ -8,7 +8,7 @@ InputEngine = Class.extend({
     y: 0
   },
 
-  setup: function () {
+  init: function () {
     var _this = this;
 
     // WASD
@@ -25,7 +25,7 @@ InputEngine = Class.extend({
     var action = game.inputEngine.bindings[e.keyCode];
     if (action) {
       game.inputEngine.actions[action] = true;
-      mediator.call(mediatorEvent.KEY_DOWN, action);      
+      mediator.call(mediatorEvent.KEY_DOWN, action);  
     }
   },
 

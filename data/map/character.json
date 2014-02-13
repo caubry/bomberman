@@ -1,7 +1,7 @@
 {"frames": [
 
 {
-	"filename": "Player2_Walk_Back1.png",
+	"filename": "Player1_Walk_Back1.png",
 	"frame": {"x":2,"y":2,"w":17,"h":24},
 	"rotated": false,
 	"trimmed": true,
@@ -9,7 +9,7 @@
 	"sourceSize": {"w":25,"h":32}
 },
 {
-	"filename": "Player1_Run_Back2.png",
+	"filename": "Player1_Walk_Back2.png",
 	"frame": {"x":21,"y":2,"w":17,"h":25},
 	"rotated": false,
 	"trimmed": true,

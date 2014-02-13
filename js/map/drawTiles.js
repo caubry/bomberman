@@ -11,7 +11,7 @@ DrawTiles = Class.extend({
     config.DESPICABLE_BLOCK
   ],
 
-  setup: function(loadedMap) {
+  init: function(loadedMap) {
     this.data  = loadedMap.data;
     this.layer = loadedMap.layers;
     this.image = loadedMap.image;
