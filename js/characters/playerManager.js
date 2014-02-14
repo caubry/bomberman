@@ -1,31 +1,20 @@
 PlayerManager = Class.extend({
   
   playerSprite: {},
-  atlasName: null,
-  positionOrigin: {
-    player_one: {
-      x: 48,
-      y: 35
-    },
-    player_two: {},
-    player_three: {},
-    player_four: {}
-  },
   drawPlayer: null,
-  scale: {
-    x: 1.8,
-    y: 1.8
+  requestId: 0,
+  settimeoutID: 0,
+  startTime: 0,
+  newPos: {
+    x: null, 
+    y: null
   },
-  currentFrame: 0,
-  refreshIntervalId: null,
-  allowNextAnimation: null,
-  moveTimer: 0,
-  savedTimer: 0,
 
   init: function (loadedSprite) {
     var playerNumber, action, movement;
-    var sprite     = loadedSprite.sprites;
-    this.atlasName = loadedSprite.atlasName;
+    var sprite    = loadedSprite.sprites;
+    var atlasName = loadedSprite.atlasName;
+    var _this = this;
 
     for (var name in sprite) {
       // 1 
@@ -51,41 +40,39 @@ PlayerManager = Class.extend({
     }
 
     // Initialise drawing
-    this.drawPlayer = new DrawPlayer(this.atlasName, this.scale);
-    this.drawPlayer.draw(this.playerSprite[1].Walk.Front[0], this.positionOrigin.player_one);
+    this.drawPlayer = new DrawPlayer(atlasName, config.PLAYER_PROPERTIES.player_one.scale);
+    this.drawPlayer.draw(this.playerSprite[1].Walk.Front[0], config.PLAYER_PROPERTIES.player_one.position);
+
+    this.newPos = {
+      x: config.PLAYER_PROPERTIES.player_one.position.x, 
+      y: config.PLAYER_PROPERTIES.player_one.position.y
+    };
+  },
+
+  update: function() {
+
   },
 
   move: function(keyCode) {
     var _this = this;
-    var newPos = {
-      x: null, 
-      y: null
-    };
 
-    clearInterval(this.refreshIntervalId);
+    // Allow a request at the time
+    if (this.requestId === 0) {
+      (function animationLoop() {
+        // Control the timing of an animation with requestAnimationFrame
+        _this.settimeoutID = setTimeout(function() {
+          _this.render(keyCode);
+          _this.requestId = requestAnimationFrame(animationLoop, _this.move);
+        }, 1000 / config.FPS);
+      })();
+    }
+  },
 
-    this.refreshIntervalId = setInterval(
-      function(){
-        _this.onTick();
-      }, (config.FPS - 1)
-    );
-
+  render: function(keyCode) {
+    // Grab the current time
     switch (keyCode) {
       case config.PLAYER_DOWN:
-        if (this.moveTimer === this.savedTimer) {
-          if (this.currentFrame < 2) {
-            setInterval(
-              function(){
-                _this.currentFrame++;
-              }, 0
-            );
-          } else {
-            this.currentFrame = 0;
-          }
-        } else {
-          this.currentFrame = 0;
-        }
-        this.positionOrigin.player_one.y += 5;
+        this.newPos.y += 1;
       break;
       case config.PLAYER_RIGHT:
       //
@@ -98,18 +85,18 @@ PlayerManager = Class.extend({
       break; 
     }
 
-    this.drawPlayer.reDraw(this.playerSprite[1].Walk.Front[this.currentFrame], this.positionOrigin.player_one);
-    this.savedTimer = this.moveTimer;
-    // this.currentFrame++;
-    // this.drawPlayer.draw(this.playerSprite[1]['Walk']['Front'][this.currentFrame], this.positionOrigin);
+    // Draw user input on the map
+    this.drawPlayer.reDraw(this.playerSprite[1]['Walk']['Front'][2], this.newPos);
   },
 
-  unTick: function(keyCode) {
-    clearInterval(this.refreshIntervalId);
-  },
-
-  onTick: function() {
-    this.moveTimer++;
+  onKeyUp: function() {
+    // Cancel the animation request
+    if (this.requestId) {
+      clearTimeout(this.settimeoutID);
+      cancelAnimationFrame(this.requestId);
+    }
+    // Allow a new request to be called
+    this.requestId = 0;
   }
 
 });

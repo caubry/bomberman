@@ -49,14 +49,14 @@ Game = Class.extend({
 
   onKeyDown: function(keyCode) {
     // Just to test it out 
-    game.mapLevel.draw(config.STATIC_BLOCK);
-    game.mapLevel.draw(config.POWER_UPS);
-    game.mapLevel.draw(config.DESPICABLE_BLOCK);
+    // game.mapLevel.draw(config.STATIC_BLOCK);
+    // game.mapLevel.draw(config.POWER_UPS);
+    // game.mapLevel.draw(config.DESPICABLE_BLOCK);
     game.textureManager.playerManager.move(keyCode);
   },
 
   onKeyUp: function(keyCode) {
-    game.textureManager.playerManager.unTick(keyCode);
+    game.textureManager.playerManager.onKeyUp(keyCode);
   },
 
   removeEvents: function() {

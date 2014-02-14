@@ -1,6 +1,7 @@
 var utils;
 var mediator;
 var game;
+
 /**
 * Create a canvas element and return it.
 */
