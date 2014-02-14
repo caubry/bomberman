@@ -86,7 +86,7 @@ PlayerManager = Class.extend({
     }
 
     // Draw user input on the map
-    this.drawPlayer.reDraw(this.playerSprite[1]['Walk']['Front'][2], this.newPos);
+    this.drawPlayer.reDraw(this.playerSprite[1].Walk.Front[2], this.newPos);
   },
 
   onKeyUp: function() {
