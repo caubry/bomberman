@@ -58,7 +58,7 @@ Game = Class.extend({
   },
 
   onKeyDown: function(keyCode) {
-    game.textureManager.playerManager.move(keyCode);
+    game.textureManager.playerManager.onKeyDown(keyCode);
   },
 
   onKeyUp: function(keyCode) {
