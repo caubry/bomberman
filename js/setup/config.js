@@ -5,7 +5,7 @@ var config = {
 
   STAGE_WIDTH       : 525,
   STAGE_HEIGHT      : 455,
-  FPS               : 33, // 30 FPS
+  FPS               : 60,
   GAME_FONTS        : "bold 20px sans-serif",
   
   // Canvas wrapper that also includes UI elements.
@@ -42,6 +42,6 @@ var config = {
     player_two: {},
     player_three: {},
     player_four: {}
-  }
+  },
 
 };

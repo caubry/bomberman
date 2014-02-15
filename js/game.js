@@ -32,6 +32,15 @@ Game = Class.extend({
     mediator.create(game.canvas, mediatorEvent.PLAYER_RENDERED, game.playerRendered);
     // Only start drawing characters if the background has been rendered.
     if (game.hasTiles) game.textureManager.draw(loadedSprite);
+    else {
+      // Draw characters onto map, only when the background has finished rendering.
+      var checkforTiles = setTimeout(function() {
+        if (game.hasTiles) {
+          game.textureManager.draw(loadedSprite);
+          clearTimeout(checkforTiles);
+        }
+      }, 1000 / config.FPS);
+    }
     mediator.remove(game.canvas, mediatorEvent.TEXTURE_LOADED, game.textureLoaded);
   },
 
@@ -44,19 +53,22 @@ Game = Class.extend({
     // Add user inputs
     mediator.create(game.canvas, mediatorEvent.KEY_DOWN, game.onKeyDown);
     mediator.create(game.canvas, mediatorEvent.KEY_UP, game.onKeyUp);
+    mediator.create(game.canvas, mediatorEvent.REDRAW_PLAYERS, game.redrawMap);
     mediator.remove(game.canvas, mediatorEvent.PLAYER_RENDERED, game.playerRendered);
   },
 
   onKeyDown: function(keyCode) {
-    // Just to test it out 
-    // game.mapLevel.draw(config.STATIC_BLOCK);
-    // game.mapLevel.draw(config.POWER_UPS);
-    // game.mapLevel.draw(config.DESPICABLE_BLOCK);
     game.textureManager.playerManager.move(keyCode);
   },
 
   onKeyUp: function(keyCode) {
     game.textureManager.playerManager.onKeyUp(keyCode);
+  },
+
+  redrawMap: function() {
+    game.mapLevel.draw(config.STATIC_BLOCK);
+    game.mapLevel.draw(config.POWER_UPS);
+    game.mapLevel.draw(config.DESPICABLE_BLOCK);
   },
 
   removeEvents: function() {

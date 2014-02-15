@@ -34,7 +34,12 @@ var mediatorEvent = {
   /*@no Params
   Called by DrawPlayer, when player has been rendered
   Retrieved by Game*/
-  PLAYER_RENDERED: 'onPlayerRendered'
+  PLAYER_RENDERED: 'onPlayerRendered',
+
+  /*@no Params
+  Called by PlayerManager, before reDrawing players
+  Retrieved by Game*/
+  REDRAW_PLAYERS: 'onPlayersRedrawn'
 
 };
 

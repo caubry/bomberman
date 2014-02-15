@@ -3,22 +3,15 @@ InputEngine = Class.extend({
   bindings: {},
   actions: {},
 
-  mouse: {
-    x: 0,
-    y: 0
-  },
-
   init: function () {
-    var _this = this;
-
     // WASD
     this.bind(87, 'move-up');
     this.bind(65, 'move-left');
     this.bind(83, 'move-down');
     this.bind(68, 'move-right');
 
-    document.addEventListener('keydown', _this.onKeyDown);
-    document.addEventListener('keyup', _this.onKeyUp);
+    $(document).keydown(this.onKeyDown);
+    $(document).keyup(this.onKeyUp);
   },
 
   onKeyDown: function (e) {

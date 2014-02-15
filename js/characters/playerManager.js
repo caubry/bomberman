@@ -9,6 +9,10 @@ PlayerManager = Class.extend({
     x: null, 
     y: null
   },
+  currentFrame: null,
+  counter: 0,
+  action: 0,
+  savedKeyCode: 0,
 
   init: function (loadedSprite) {
     var playerNumber, action, movement;
@@ -47,10 +51,7 @@ PlayerManager = Class.extend({
       x: config.PLAYER_PROPERTIES.player_one.position.x, 
       y: config.PLAYER_PROPERTIES.player_one.position.y
     };
-  },
-
-  update: function() {
-
+    this.currentFrame = 0;
   },
 
   move: function(keyCode) {
@@ -68,35 +69,58 @@ PlayerManager = Class.extend({
     }
   },
 
-  render: function(keyCode) {
-    // Grab the current time
-    switch (keyCode) {
-      case config.PLAYER_DOWN:
-        this.newPos.y += 1;
-      break;
-      case config.PLAYER_RIGHT:
-      //
-      break;
-      case config.PLAYER_LEFT:
-      //
-      break;
-      case config.PLAYER_RIGHT:
-      //
-      break; 
+  changeAnim: function() {
+    if (this.counter % 10 === 0) {
+      if (this.currentFrame > 1) {
+        this.currentFrame = 0;
+      } else {
+        this.currentFrame++;
+      }
     }
-
-    // Draw user input on the map
-    this.drawPlayer.reDraw(this.playerSprite[1].Walk.Front[2], this.newPos);
   },
 
-  onKeyUp: function() {
+  render: function(keyCode) {
+    this.counter++;
+    this.savedKeyCode = keyCode;
+
+    if (keyCode === config.PLAYER_DOWN) {
+      this.action = 'Front';
+      this.changeAnim();
+      this.newPos.y += 1;
+    } else if (keyCode === config.PLAYER_UP) {
+      this.action = 'Back';
+      this.changeAnim();
+      this.newPos.y -= 1;
+    } else if (keyCode === config.PLAYER_RIGHT) {
+      this.action = 'Right';
+      this.changeAnim();
+      this.newPos.x += 1;
+    } else if (keyCode === config.PLAYER_LEFT) {
+      this.action = 'Left';
+      this.changeAnim();
+      this.newPos.x -= 1;
+    }
+    // Draw user input on the map
+    mediator.call(mediatorEvent.REDRAW_PLAYERS);  
+    this.drawPlayer.reDraw(this.playerSprite[1].Walk[this.action][this.currentFrame], this.newPos);
+  },
+
+  onKeyUp: function(keyCode) {
+    if (keyCode == this.savedKeyCode) {
+      console.log('POO')
+    }
+
     // Cancel the animation request
     if (this.requestId) {
       clearTimeout(this.settimeoutID);
       cancelAnimationFrame(this.requestId);
     }
+
     // Allow a new request to be called
-    this.requestId = 0;
+    this.requestId    = 0;
+    this.counter      = 0;
+    this.currentFrame = 0;
+    this.drawPlayer.reDraw(this.playerSprite[1].Walk[this.action][this.currentFrame], this.newPos);
   }
 
 });

@@ -10,7 +10,7 @@
 },
 {
 	"filename": "Player1_Walk_Back2.png",
-	"frame": {"x":21,"y":2,"w":17,"h":25},
+	"frame": {"x":19,"y":2,"w":17,"h":25},
 	"rotated": false,
 	"trimmed": true,
 	"spriteSourceSize": {"x":5,"y":3,"w":17,"h":25},
@@ -18,7 +18,7 @@
 },
 {
 	"filename": "Player1_Walk_Back3.png",
-	"frame": {"x":40,"y":2,"w":18,"h":25},
+	"frame": {"x":37,"y":2,"w":18,"h":25},
 	"rotated": false,
 	"trimmed": true,
 	"spriteSourceSize": {"x":4,"y":7,"w":18,"h":25},
@@ -50,7 +50,7 @@
 },
 {
 	"filename": "Player1_Walk_Left1.png",
-	"frame": {"x":2,"y":56,"w":20,"h":24},
+	"frame": {"x":2,"y":51,"w":20,"h":24},
 	"rotated": false,
 	"trimmed": true,
 	"spriteSourceSize": {"x":5,"y":4,"w":20,"h":24},
@@ -58,7 +58,7 @@
 },
 {
 	"filename": "Player1_Walk_Left2.png",
-	"frame": {"x":24,"y":56,"w":18,"h":25},
+	"frame": {"x":22.5,"y":52,"w":18,"h":25},
 	"rotated": false,
 	"trimmed": true,
 	"spriteSourceSize": {"x":3,"y":4,"w":18,"h":25},
@@ -66,7 +66,7 @@
 },
 {
 	"filename": "Player1_Walk_Left3.png",
-	"frame": {"x":44,"y":56,"w":18,"h":24},
+	"frame": {"x":41,"y":51,"w":18,"h":24},
 	"rotated": false,
 	"trimmed": true,
 	"spriteSourceSize": {"x":5,"y":6,"w":18,"h":24},
@@ -74,7 +74,7 @@
 },
 {
 	"filename": "Player1_Walk_Right1.png",
-	"frame": {"x":2,"y":83,"w":17,"h":24},
+	"frame": {"x":6,"y":76,"w":17,"h":24},
 	"rotated": false,
 	"trimmed": true,
 	"spriteSourceSize": {"x":6,"y":4,"w":17,"h":24},
@@ -82,7 +82,7 @@
 },
 {
 	"filename": "Player1_Walk_Right2.png",
-	"frame": {"x":21,"y":83,"w":17,"h":25},
+	"frame": {"x":23,"y":76,"w":17,"h":25},
 	"rotated": false,
 	"trimmed": true,
 	"spriteSourceSize": {"x":7,"y":3,"w":17,"h":25},
@@ -90,7 +90,7 @@
 },
 {
 	"filename": "Player1_Walk_Right3.png",
-	"frame": {"x":40,"y":83,"w":21,"h":25},
+	"frame": {"x":39,"y":76,"w":21,"h":25},
 	"rotated": false,
 	"trimmed": true,
 	"spriteSourceSize": {"x":4,"y":3,"w":21,"h":25},
