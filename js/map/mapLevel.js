@@ -13,6 +13,10 @@ MapLevel = Class.extend({
 
   draw: function(layer) {
     this.drawTiles.redraw(layer);
+  },
+
+  getLayerInfo: function(layer) {
+    return this.drawTiles.getLayerInfo(layer);
   }
 
 });

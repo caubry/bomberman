@@ -5,6 +5,7 @@ DrawPlayer = Class.extend({
   scaleY: null,
   sprite: null,
   positionOrigin: null,
+  hitBoxRect: null,
 
   init: function(atlasName, scale) {
     this.atlasName      = atlasName;
@@ -18,6 +19,18 @@ DrawPlayer = Class.extend({
     this.positionOrigin = positionOrigin;
     this.drawImage();
     mediator.call(mediatorEvent.PLAYER_RENDERED);
+  },
+
+  drawHitBox: function(position) {
+    this.hitBoxRect = {x: position.x - 10, y: position.y, w: 29, h: 30};
+    game.ctx.beginPath();
+    game.ctx.rect(this.hitBoxRect.x, this.hitBoxRect.y, this.hitBoxRect.w, this.hitBoxRect.h);
+    game.ctx.fillStyle = 'red';
+    game.ctx.fill();
+  },
+
+  getHitBox: function() {
+    return this.hitBoxRect;
   },
 
   /*Draw every time a character moves*/

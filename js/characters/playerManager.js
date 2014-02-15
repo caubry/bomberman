@@ -2,9 +2,6 @@ PlayerManager = Class.extend({
   
   playerSprite: {},
   drawPlayer: null,
-  requestId: 0,
-  settimeoutID: 0,
-  startTime: 0,
   newPos: {
     x: null, 
     y: null
@@ -12,7 +9,6 @@ PlayerManager = Class.extend({
   currentFrame: null,
   counter: 0,
   action: 0,
-  savedKeyCode: 0,
   keyCode: 0,
 
   upPressed: 0,
@@ -25,7 +21,7 @@ PlayerManager = Class.extend({
     var sprite    = loadedSprite.sprites;
     var atlasName = loadedSprite.atlasName;
     var _this = this;
-
+    
     for (var name in sprite) {
       // 1 
       playerNumber = name.replace( /(^.+\D)(\d+)(\D.+$)/i,'$2');
@@ -52,6 +48,7 @@ PlayerManager = Class.extend({
     // Initialise drawing
     this.drawPlayer = new DrawPlayer(atlasName, config.PLAYER_PROPERTIES.player_one.scale);
     this.drawPlayer.draw(this.playerSprite[1].Walk.Front[0], config.PLAYER_PROPERTIES.player_one.position);
+    this.drawPlayer.drawHitBox(config.PLAYER_PROPERTIES.player_one.position);
 
     this.newPos = {
       x: config.PLAYER_PROPERTIES.player_one.position.x, 
@@ -130,6 +127,7 @@ PlayerManager = Class.extend({
       mediator.call(mediatorEvent.REDRAW_PLAYERS);  
       // Draw user input on the map
       this.drawPlayer.reDraw(this.playerSprite[1].Walk[this.action][this.currentFrame], this.newPos);
+      this.drawPlayer.drawHitBox(this.newPos);
     }
   }
 });

@@ -4,11 +4,11 @@ DrawTiles = Class.extend({
   data: null,
   layer: null,
   image: null,
+  tileInfo: {},
 
   layersOrdered: [
     config.STATIC_BLOCK,
-    config.POWER_UPS,
-    config.DESPICABLE_BLOCK
+    config.POWER_UPS
   ],
 
   init: function(loadedMap) {
@@ -27,29 +27,44 @@ DrawTiles = Class.extend({
     for (var i = 0; i < this.layersOrdered.length; i++) {
       this.draw(this.layer[this.layersOrdered[i]]);
     }
-
     mediator.call(mediatorEvent.TILES_RENDERED);
   },
 
   draw: function(layer) {
-    var _this = this;
-    if (layer.type !== "tilelayer" || !layer.opacity) { return; }
-    size = this.data.tilewidth;
-    if (this.layers.length < this.data.layers.length) {
-      layer.data.forEach(function(tile_idx, i) {
-        if (!tile_idx) { return; }
-        var img_x, img_y, s_x, s_y,
-        tile = _this.data.tilesets[0];
-        tile_idx--;        
+    var _this         = this;
+    var rectangleInfo = {};
 
-        img_x = (tile_idx % (tile.imagewidth / size)) * size;
-        img_y = Math.floor(tile_idx / (tile.imagewidth / size)) * size;
+    if (layer) {
+      if (layer.type !== "tilelayer" || !layer.opacity) { return; }
+      size = this.data.tilewidth;
+      if (this.layers.length < this.data.layers.length) {
+        layer.data.forEach(function(tile_idx, i) {
+          if (!tile_idx) { return; }
+          var img_x, img_y, s_x, s_y,
+          tile = _this.data.tilesets[0];
+          tile_idx--;        
 
-        s_x = (i % layer.width) * size;
-        s_y = Math.floor(i / layer.width) * size;
+          img_x = (tile_idx % (tile.imagewidth / size)) * size;
+          img_y = Math.floor(tile_idx / (tile.imagewidth / size)) * size;
 
-        game.ctx.drawImage(_this.image, img_x, img_y, size, size, s_x, s_y, size, size);
-      });
+          s_x = (i % layer.width) * size;
+          s_y = Math.floor(i / layer.width) * size;
+
+          game.ctx.drawImage(_this.image, img_x, img_y, size, size, s_x, s_y, size, size);
+          rectangleInfo = {
+            x: s_x, 
+            y: s_y,
+            w: size,
+            h: size
+          };
+          _this.tileInfo[layer.name] = [];
+          _this.tileInfo[layer.name].push(rectangleInfo);
+        });
+      }
     }
   },
+
+  getLayerInfo: function(layerName) {
+    return this.tileInfo[layerName];
+  } 
 });

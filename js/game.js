@@ -6,6 +6,7 @@ Game = Class.extend({
   textureManager:null,
   inputEngine:null,
   hasTiles: false,
+  staticBlockInfo: null,
 
   init: function(canvas) {
     this.canvas = canvas;
@@ -25,6 +26,8 @@ Game = Class.extend({
   tilesLoaded: function(loadedMap) {
     mediator.create(game.canvas, mediatorEvent.TILES_RENDERED, game.tilesRendered);
     game.mapLevel.tilesLoaded(loadedMap);
+    game.staticBlockInfo = game.mapLevel.getLayerInfo(config.STATIC_BLOCK);
+    console.log(game.staticBlockInfo);
     mediator.remove(game.canvas, mediatorEvent.TILES_LOADED, game.tilesLoaded);
   },
 

@@ -12,14 +12,15 @@ var config = {
   GAME_CONTENT_ID   : "gameContent",
   GAME_CANVAS_ID    : "gameCanvas",
 
-  MAP_DATA        : "data/map/map-level1.json",
+  MAP_DATA        : "data/map/map-level2.json",
   TEXTURE_DATA    : "data/map/character.json",
 
   // Map layers
+  GREEN_AREA            : "green-area",
   STATIC_BLOCK          : "static-blocks",
   DESPICABLE_BLOCK      : "despicable-block",
   POWER_UPS             : "power-ups",
-  DESPICABLE_COLLISION  : "despicable-collision",
+  SAFE_AREA             : "safe-area",
 
   // User input
   PLAYER_UP       : 'move-up',
