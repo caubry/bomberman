@@ -107,7 +107,6 @@ PlayerManager = Class.extend({
 
   onKeyUp: function(keyCode) {
     if (keyCode == this.savedKeyCode) {
-      console.log('POO')
     }
 
     // Cancel the animation request

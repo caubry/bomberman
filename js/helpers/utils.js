@@ -52,7 +52,7 @@ Utils = Class.extend({
   /**
   * Rectangle collision
   */
-  rect_collision = function(x1, y1, size1, x2, y2, size2) {
+  rect_collision: function(x1, y1, size1, x2, y2, size2) {
     var bottom1, bottom2, left1, left2, right1, right2, top1, top2;
     left1 = x1 - size1;
     right1 = x1 + size1;
