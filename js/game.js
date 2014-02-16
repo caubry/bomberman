@@ -32,20 +32,26 @@ Game = Class.extend({
   },
 
   textureLoaded: function(loadedSprite) {
-    mediator.create(game.canvas, mediatorEvent.PLAYER_RENDERED, game.playerRendered);
     // Only start drawing characters if the background has been rendered.
     console.log(game.hasTiles);
-    if (game.hasTiles) game.textureManager.draw(loadedSprite);
+    var _this = this;
+    var setTime;
+
+    if (game.hasTiles) {
+      mediator.create(game.canvas, mediatorEvent.PLAYER_RENDERED, game.playerRendered);
+      game.textureManager.draw(loadedSprite);
+      clearTimeout(setTime);
+      mediator.remove(game.canvas, mediatorEvent.TEXTURE_LOADED, game.textureLoaded);
+    }
     else {
       // Draw characters onto map, only when the background has finished rendering.
-      setTimeout(function() {
-        if (game.hasTiles) {
-          console.log('ELSE');
-          game.textureManager.draw(loadedSprite);
-        }
-      }, 1000 / config.FPS);
+      (function renderPlayer() {
+        setTime = setTimeout(function() {
+          console.log('TEST');
+          requestAnimationFrame(renderPlayer, _this.textureLoaded);
+        }, 1000 / config.FPS);
+      })();
     }
-    mediator.remove(game.canvas, mediatorEvent.TEXTURE_LOADED, game.textureLoaded);
   },
 
   tilesRendered: function() {
