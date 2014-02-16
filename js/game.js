@@ -37,7 +37,6 @@ Game = Class.extend({
 
     // Draw characters onto map, only when the background has finished rendering.
     (function renderPlayer() {
-      console.log(game.hasTiles);
       // Only start drawing characters if the background has been rendered.
       if (game.hasTiles) {
         mediator.create(game.canvas, mediatorEvent.PLAYER_RENDERED, game.playerRendered);
@@ -54,6 +53,7 @@ Game = Class.extend({
 
   tilesRendered: function() {
     game.hasTiles = true;
+    mediator.call(mediatorEvent.PLAYER_RENDERED);
     mediator.remove(game.canvas, mediatorEvent.TILES_RENDERED, game.tilesRendered);
   },
 

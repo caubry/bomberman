@@ -18,7 +18,6 @@ DrawPlayer = Class.extend({
     this.sprite         = sprite;
     this.positionOrigin = positionOrigin;
     this.drawImage();
-    console.log('CALL DRAW IMAGE');
     mediator.call(mediatorEvent.PLAYER_RENDERED);
   },
 
@@ -59,7 +58,6 @@ DrawPlayer = Class.extend({
         hlf.x, this.positionOrigin.y + hlf.y, 
         currentImage.w * this.scaleX, currentImage.h * this.scaleY
       );
-      console.log('DRAW PLAYER');
     }
   }
 
