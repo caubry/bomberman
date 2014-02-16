@@ -46,8 +46,14 @@ Game = Class.extend({
     else {
       // Draw characters onto map, only when the background has finished rendering.
       (function renderPlayer() {
+        console.log(game.hasTiles);
+        if (game.hasTiles) {
+          mediator.create(game.canvas, mediatorEvent.PLAYER_RENDERED, game.playerRendered);
+          game.textureManager.draw(loadedSprite);
+          clearTimeout(setTime);
+          mediator.remove(game.canvas, mediatorEvent.TEXTURE_LOADED, game.textureLoaded);
+        }
         setTime = setTimeout(function() {
-          console.log('TEST');
           requestAnimationFrame(renderPlayer, _this.textureLoaded);
         }, 1000 / config.FPS);
       })();
