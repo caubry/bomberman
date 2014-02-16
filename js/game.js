@@ -38,11 +38,10 @@ Game = Class.extend({
     if (game.hasTiles) game.textureManager.draw(loadedSprite);
     else {
       // Draw characters onto map, only when the background has finished rendering.
-      var checkforTiles = setTimeout(function() {
+      setTimeout(function() {
         if (game.hasTiles) {
           console.log('ELSE');
           game.textureManager.draw(loadedSprite);
-          clearTimeout(checkforTiles);
         }
       }, 1000 / config.FPS);
     }
