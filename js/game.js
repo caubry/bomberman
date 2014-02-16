@@ -33,14 +33,14 @@ Game = Class.extend({
 
   textureLoaded: function(loadedSprite) {
     mediator.create(game.canvas, mediatorEvent.PLAYER_RENDERED, game.playerRendered);
-    console.log('DRAW PLAYER');
     // Only start drawing characters if the background has been rendered.
+    console.log(game.hasTiles);
     if (game.hasTiles) game.textureManager.draw(loadedSprite);
     else {
-      console.log('ELSE');
       // Draw characters onto map, only when the background has finished rendering.
       var checkforTiles = setTimeout(function() {
         if (game.hasTiles) {
+          console.log('ELSE');
           game.textureManager.draw(loadedSprite);
           clearTimeout(checkforTiles);
         }

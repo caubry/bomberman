@@ -9,6 +9,9 @@ TextureManager = Class.extend({
 
   draw: function(loadedSprite) {
     this.playerManager = new PlayerManager(loadedSprite);
+  },
+
+  updatePlayer: function() {
     this.playerManager.update();
   }
 
