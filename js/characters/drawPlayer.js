@@ -21,8 +21,8 @@ DrawPlayer = Class.extend({
     mediator.call(mediatorEvent.PLAYER_RENDERED);
   },
 
-  drawHitBox: function(position) {
-    this.hitBoxRect = {x: position.x - 10, y: position.y, w: 29, h: 30};
+  drawHitBox: function(hitBox) {
+    this.hitBoxRect = {x: hitBox.x, y: hitBox.y, w: hitBox.w, h: hitBox.h};
     game.ctx.beginPath();
     game.ctx.rect(this.hitBoxRect.x, this.hitBoxRect.y, this.hitBoxRect.w, this.hitBoxRect.h);
     game.ctx.fillStyle = 'red';

@@ -41,7 +41,7 @@ LoadTiles = Class.extend({
       var currentLayer = layers[key];
       // console.log(currentLayer.name)
       switch(currentLayer.name) {
-        case config.STATIC_BLOCK: {
+        case config.STATIC_BLOCK : {
           this.mapLayers[config.STATIC_BLOCK] = currentLayer;
 
           // /*Grab the 'green' tiles data, save the safe areas
@@ -58,7 +58,7 @@ LoadTiles = Class.extend({
         }
         break;
         case config.GREEN_AREA: {
-          //
+          this.mapLayers[config.GREEN_AREA] = currentLayer;
         }
         break;
         case config.SAFE_AREA: {

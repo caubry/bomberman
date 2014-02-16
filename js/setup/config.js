@@ -45,4 +45,15 @@ var config = {
     player_four: {}
   },
 
+  HITBOX_WALLS: {
+    player_one: {
+      position: {
+        x: 5,
+        y: -4,
+        w: 18,
+        h: 20
+      }
+    }
+  }
+
 };

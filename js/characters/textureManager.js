@@ -7,12 +7,9 @@ TextureManager = Class.extend({
     this.loadTexture = new LoadTexture(config.TEXTURE_DATA);
   },
 
-  draw: function(loadedSprite) {
+  draw: function(loadedSprite, staticBlockInfo) {
     this.playerManager = new PlayerManager(loadedSprite);
+    this.playerManager.update(staticBlockInfo);
   },
-
-  updatePlayer: function() {
-    this.playerManager.update();
-  }
 
 });

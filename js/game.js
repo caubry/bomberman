@@ -5,8 +5,8 @@ Game = Class.extend({
   mapLevel: null,
   textureManager:null,
   inputEngine:null,
-  hasTiles: false,
   staticBlockInfo: null,
+  hasTiles: false,
 
   init: function(canvas) {
     this.canvas = canvas;
@@ -27,7 +27,6 @@ Game = Class.extend({
     mediator.create(game.canvas, mediatorEvent.TILES_RENDERED, game.tilesRendered);
     game.mapLevel.tilesLoaded(loadedMap);
     game.staticBlockInfo = game.mapLevel.getLayerInfo(config.STATIC_BLOCK);
-    console.log(game.staticBlockInfo);
     mediator.remove(game.canvas, mediatorEvent.TILES_LOADED, game.tilesLoaded);
   },
 
@@ -40,9 +39,9 @@ Game = Class.extend({
       // Only start drawing characters if the background has been rendered.
       if (game.hasTiles) {
         mediator.create(game.canvas, mediatorEvent.PLAYER_RENDERED, game.playerRendered);
-        game.textureManager.draw(loadedSprite);
-        clearTimeout(setTime);
+        game.textureManager.draw(loadedSprite, game.staticBlockInfo);
         mediator.remove(game.canvas, mediatorEvent.TEXTURE_LOADED, game.textureLoaded);
+        clearTimeout(setTime);
       } else {
         setTime = setTimeout(function() {
           requestAnimationFrame(renderPlayer, _this.textureLoaded);
@@ -75,8 +74,7 @@ Game = Class.extend({
 
   redrawMap: function() {
     game.mapLevel.draw(config.STATIC_BLOCK);
-    game.mapLevel.draw(config.POWER_UPS);
-    game.mapLevel.draw(config.DESPICABLE_BLOCK);
+    game.mapLevel.draw(config.GREEN_AREA);
   },
 
   removeEvents: function() {

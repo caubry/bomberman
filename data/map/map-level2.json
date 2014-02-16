@@ -45,10 +45,12 @@
          "y":0
         }, 
         {
+         "color":"#00aa7f",
          "height":13,
          "name":"safe-area",
          "objects":[
                 {
+                 "gid":2,
                  "height":0,
                  "name":"",
                  "properties":
@@ -62,6 +64,7 @@
                  "y":70
                 }, 
                 {
+                 "gid":2,
                  "height":0,
                  "name":"",
                  "properties":
@@ -75,6 +78,7 @@
                  "y":70
                 }, 
                 {
+                 "gid":2,
                  "height":0,
                  "name":"",
                  "properties":
@@ -88,6 +92,7 @@
                  "y":105
                 }, 
                 {
+                 "gid":2,
                  "height":0,
                  "name":"",
                  "properties":
@@ -101,6 +106,7 @@
                  "y":71
                 }, 
                 {
+                 "gid":2,
                  "height":0,
                  "name":"",
                  "properties":
@@ -114,6 +120,7 @@
                  "y":70
                 }, 
                 {
+                 "gid":2,
                  "height":0,
                  "name":"",
                  "properties":
@@ -127,6 +134,7 @@
                  "y":105
                 }, 
                 {
+                 "gid":2,
                  "height":0,
                  "name":"",
                  "properties":
@@ -140,6 +148,7 @@
                  "y":421
                 }, 
                 {
+                 "gid":2,
                  "height":0,
                  "name":"",
                  "properties":
@@ -153,6 +162,7 @@
                  "y":385
                 }, 
                 {
+                 "gid":2,
                  "height":0,
                  "name":"",
                  "properties":
@@ -166,6 +176,7 @@
                  "y":421
                 }, 
                 {
+                 "gid":2,
                  "height":0,
                  "name":"",
                  "properties":
@@ -179,6 +190,7 @@
                  "y":421
                 }, 
                 {
+                 "gid":2,
                  "height":0,
                  "name":"",
                  "properties":
@@ -192,6 +204,7 @@
                  "y":386
                 }, 
                 {
+                 "gid":2,
                  "height":0,
                  "name":"",
                  "properties":

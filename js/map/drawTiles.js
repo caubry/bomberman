@@ -8,7 +8,7 @@ DrawTiles = Class.extend({
 
   layersOrdered: [
     config.STATIC_BLOCK,
-    config.POWER_UPS
+    config.GREEN_AREA
   ],
 
   init: function(loadedMap) {
@@ -34,33 +34,35 @@ DrawTiles = Class.extend({
     var _this         = this;
     var rectangleInfo = {};
 
-    if (layer) {
-      if (layer.type !== "tilelayer" || !layer.opacity) { return; }
-      size = this.data.tilewidth;
-      if (this.layers.length < this.data.layers.length) {
-        layer.data.forEach(function(tile_idx, i) {
-          if (!tile_idx) { return; }
-          var img_x, img_y, s_x, s_y,
-          tile = _this.data.tilesets[0];
-          tile_idx--;        
+    if (layer.type !== "tilelayer" || !layer.opacity) { return; }
+    size = this.data.tilewidth;
+    if (this.layers.length < this.data.layers.length) {
+      layer.data.forEach(function(tile_idx, i) {
+        if (!tile_idx) { return; }
+        var img_x, img_y, s_x, s_y,
+        tile = _this.data.tilesets[0];
+        tile_idx--;        
 
-          img_x = (tile_idx % (tile.imagewidth / size)) * size;
-          img_y = Math.floor(tile_idx / (tile.imagewidth / size)) * size;
+        img_x = (tile_idx % (tile.imagewidth / size)) * size;
+        img_y = Math.floor(tile_idx / (tile.imagewidth / size)) * size;
 
-          s_x = (i % layer.width) * size;
-          s_y = Math.floor(i / layer.width) * size;
+        s_x = (i % layer.width) * size;
+        s_y = Math.floor(i / layer.width) * size;
 
-          game.ctx.drawImage(_this.image, img_x, img_y, size, size, s_x, s_y, size, size);
-          rectangleInfo = {
-            x: s_x, 
-            y: s_y,
-            w: size,
-            h: size
-          };
+        game.ctx.drawImage(_this.image, img_x, img_y, size, size, s_x, s_y, size, size);
+        rectangleInfo = {
+          x: s_x, 
+          y: s_y,
+          w: size,
+          h: size
+        };
+
+        if(!_this.tileInfo[layer.name]) {
           _this.tileInfo[layer.name] = [];
-          _this.tileInfo[layer.name].push(rectangleInfo);
-        });
-      }
+        }
+        
+        _this.tileInfo[layer.name].push(rectangleInfo);
+      });
     }
   },
 
