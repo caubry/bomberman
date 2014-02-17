@@ -26,7 +26,7 @@ DrawPlayer = Class.extend({
     game.ctx.beginPath();
     game.ctx.rect(this.hitBoxRect.x, this.hitBoxRect.y, this.hitBoxRect.w, this.hitBoxRect.h);
     game.ctx.fillStyle = 'red';
-    game.ctx.fill();
+    // game.ctx.fill();  
   },
 
   getHitBox: function() {

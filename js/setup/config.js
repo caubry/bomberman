@@ -32,12 +32,12 @@ var config = {
   PLAYER_PROPERTIES: {
     player_one: {
       position: {
-        x: 48,
-        y: 38
+        x: 44,
+        y: 29 
       },
       scale: {
-        x: 1.8,
-        y: 1.8
+        x: 2.2,
+        y: 2.2
       }
     },
     player_two: {},
@@ -48,10 +48,10 @@ var config = {
   HITBOX_WALLS: {
     player_one: {
       position: {
-        x: 5,
-        y: -4,
-        w: 18,
-        h: 20
+        x: 7,
+        y: -10,
+        w: 30,
+        h: 30
       }
     }
   }

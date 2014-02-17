@@ -18,6 +18,10 @@ PlayerManager = Class.extend({
   rightPressed: 0,
   vSpeed: 1,
   savedhitBoxWalls: {},
+  w: 0, 
+  h: 0, 
+  dx: 0, 
+  dy: 0,
 
   init: function (loadedSprite) {
     var playerNumber, action, movement;
@@ -157,32 +161,58 @@ PlayerManager = Class.extend({
 
       for (var i = 0; i < this.staticBlockInfo.length; i++) {
         if (this.checkCollision(this.staticBlockInfo[i])) {
-          if(this.playerHitBox.y <= this.staticBlockInfo[i].y - (this.staticBlockInfo[i].h / 2)) {
-            console.log(this.playerHitBox.x);
-            console.log(this.staticBlockInfo[i].x - (this.staticBlockInfo[i].w / 2));
-            // Hit from below
-            // this.velocityX = -0.01;
-            // if(this.playerHitBox.x <= this.staticBlockInfo[i].x - (this.staticBlockInfo[i].w / 2)) {
-            //   console.log('TEST')
-            // }
+
+          this.w = 0.5 * (this.playerHitBox.w + this.staticBlockInfo[i].w);
+          this.h = 0.5 * (this.playerHitBox.h + this.staticBlockInfo[i].h);
+          this.dx = (this.playerHitBox.x + (this.playerHitBox.w / 2)) - (this.staticBlockInfo[i].x + (this.staticBlockInfo[i].w / 2));
+          this.dy = (this.playerHitBox.y + (this.playerHitBox.h / 2)) - (this.staticBlockInfo[i].y + (this.staticBlockInfo[i].h / 2));
+          
+          var wy = this.w * this.dy;
+          var hx = this.h * this.dx;
+
+          // TODO: Some corners are glitchy, I need to add more logic here
+          if (this.hitBoxWalls.y > 39 && this.hitBoxWalls.y < 390 &&
+              this.hitBoxWalls.x > 35 && this.hitBoxWalls.x < 460) {
+            if (wy > hx) {
+              if (wy >= -hx) {
+                  /* collision at the top */
+                if (this.playerHitBox.x < (this.staticBlockInfo[i].x + ((this.staticBlockInfo[i].w / 2) - 20))) {
+                  prevX -= 0.005;
+                } else if (this.playerHitBox.x > (this.staticBlockInfo[i].x + (this.staticBlockInfo[i].w / 2))) {
+                  prevX += 0.005;
+                }
+              } else {
+                  /* on the right */
+                if (this.playerHitBox.y < (this.staticBlockInfo[i].y + ((this.staticBlockInfo[i].h / 2) - 20))) {
+                  prevY -= 0.005;
+                } else if (this.playerHitBox.y > this.staticBlockInfo[i].y + 15) {
+                  prevY += 0.005;
+                }
+              }
+            } else {
+              if (wy > -hx) {
+                  /* on the left */
+                if (this.playerHitBox.y < (this.staticBlockInfo[i].y - 5)) {
+                  prevY -= 0.005;
+                } else if (this.playerHitBox.y > (this.staticBlockInfo[i].y + (this.staticBlockInfo[i].h - 20))) {
+                  prevY += 0.005;
+                }
+              } else {
+                  /* at the bottom */
+                if (this.playerHitBox.x < (this.staticBlockInfo[i].x - 5)) {
+                  prevX -= 0.005;
+                } else if (this.playerHitBox.x > (this.staticBlockInfo[i].x + (this.staticBlockInfo[i].w - 15))) {
+                  prevX += 0.005;
+                }
+              }
+            }
           }
-          // else if(this.playerHitBox.y >= this.staticBlockInfo[i].y + (this.staticBlockInfo[i].h / 2)) {
-          //   // Hit from above
-          //   this.velocityX = 0.01;
-          // }
-          // else if(this.playerHitBox.x > this.staticBlockInfo[i].x) {
-          //   // Hit from left
-          //   this.velocityY = -0.01;
-          // }
-          // else if ((this.playerHitBox.x + this.playerHitBox.w) > this.staticBlockInfo[i].x) {
-            // Hit from right
-            // prevY += 0.1;
-          // }
+
           this.newPos.x = prevX;
           this.newPos.y = prevY;
           this.collision = true;
         } 
-      }
+      } 
     }
   },
 
