@@ -16,7 +16,6 @@ PlayerManager = Class.extend({
   downPressed: 0,
   leftPressed: 0,
   rightPressed: 0,
-  vSpeed: 1,
   savedhitBoxWalls: {},
   w: 0, 
   h: 0, 
@@ -123,25 +122,25 @@ PlayerManager = Class.extend({
   },
 
   render: function() {
-    var prevX = this.newPos.x;
-    var prevY = this.newPos.y;
+    var prevX = Math.ceil(this.newPos.x);
+    var prevY = Math.ceil(this.newPos.y);
     this.collision = false; 
 
     if (this.upPressed == 1) {
       this.action = 'Back';
-      this.newPos.y -= this.vSpeed;
+      this.newPos.y -= config.PLAYER_SPEED;
     }
     else if (this.downPressed == 1) {
       this.action = 'Front';
-      this.newPos.y += this.vSpeed;
+      this.newPos.y += config.PLAYER_SPEED;
     }
     else if (this.rightPressed == 1) {
       this.action = 'Right';
-      this.newPos.x += this.vSpeed;
+      this.newPos.x += config.PLAYER_SPEED;
     }
     else if (this.leftPressed == 1) {
       this.action = 'Left';
-      this.newPos.x -= this.vSpeed;
+      this.newPos.x -= config.PLAYER_SPEED;
     }
 
     this.hitBoxWalls.x = this.newPos.x - this.savedhitBoxWalls.x;
@@ -170,7 +169,8 @@ PlayerManager = Class.extend({
           var wy = this.w * this.dy;
           var hx = this.h * this.dx;
 
-          // TODO: Some corners are glitchy, I need to add more logic here
+          /* TODO: Some corners are glitchy, 
+          I need to add more logic somewhere in here */
           if (this.hitBoxWalls.y > 39 && this.hitBoxWalls.y < 390 &&
               this.hitBoxWalls.x > 35 && this.hitBoxWalls.x < 460) {
             if (wy > hx) {
@@ -207,7 +207,6 @@ PlayerManager = Class.extend({
               }
             }
           }
-
           this.newPos.x = prevX;
           this.newPos.y = prevY;
           this.collision = true;
@@ -224,6 +223,14 @@ PlayerManager = Class.extend({
     {
         return true;
     }
+  },
+
+  getPlayerPos: function() {
+    var playerPosition = {
+      x: this.hitBoxWalls.x + (this.hitBoxWalls.w / 2),
+      y: this.hitBoxWalls.y + (this.hitBoxWalls.h / 2)
+    }
+    return playerPosition;
   }
 
 });

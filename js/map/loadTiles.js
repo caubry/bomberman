@@ -39,7 +39,6 @@ LoadTiles = Class.extend({
 
     for (var key in layers) {
       var currentLayer = layers[key];
-      // console.log(currentLayer.name)
       switch(currentLayer.name) {
         case config.STATIC_BLOCK : {
           this.mapLayers[config.STATIC_BLOCK] = currentLayer;
@@ -59,25 +58,32 @@ LoadTiles = Class.extend({
         break;
         case config.GREEN_AREA: {
           this.mapLayers[config.GREEN_AREA] = currentLayer;
+          // console.log(currentLayer)
+          for (var z = 0; z < currentLayer.data.length; z++) {
+            totalGreenTiles.push(currentLayer.data[z]);
+          }
         }
         break;
         case config.SAFE_AREA: {
-          //
+          this.mapLayers[config.SAFE_AREA] = currentLayer;
+          // console.log(currentLayer)
         }
         break;
         case config.DESPICABLE_BLOCK: {
-          // this.mapLayers[config.DESPICABLE_BLOCK] = currentLayer;
+          this.mapLayers[config.DESPICABLE_BLOCK] = currentLayer;
 
-          // var staticLayer        = this.mapLayers[config.STATIC_BLOCK];
-          // var randomIndexesArray = [];
-          // var desiredIndex;
+          var staticLayer        = this.mapLayers[config.STATIC_BLOCK];
+          var randomIndexesArray = [];
+          var desiredIndex;
           
           // /*Determine how many blocks can be placed on the map, 
           // using the total amount of 'green' tiles*/
-          // currentMaxDestroyableBlock = utils.getRandomInt(
-          //   (totalGreenTiles.length - 40), 
-          //   (totalGreenTiles.length - 10)
-          // );
+          currentMaxDestroyableBlock = utils.getRandomInt(
+            (totalGreenTiles.length - 40), 
+            (totalGreenTiles.length - 10)
+          );
+
+          console.log(currentMaxDestroyableBlock)
 
           // /*Add the 'green' tile area to the destroyable blocks
           // and remove any extra 'destroyable blocks' from the map*/

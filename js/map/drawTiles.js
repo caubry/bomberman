@@ -5,8 +5,10 @@ DrawTiles = Class.extend({
   layer: null,
   image: null,
   tileInfo: {},
+  savedBomb: [],
 
   layersOrdered: [
+    config.DESPICABLE_BLOCK,
     config.STATIC_BLOCK,
     config.GREEN_AREA
   ],
@@ -48,7 +50,6 @@ DrawTiles = Class.extend({
 
         s_x = (i % layer.width) * size;
         s_y = Math.floor(i / layer.width) * size;
-
         game.ctx.drawImage(_this.image, img_x, img_y, size, size, s_x, s_y, size, size);
         rectangleInfo = {
           x: s_x, 
@@ -64,6 +65,27 @@ DrawTiles = Class.extend({
         _this.tileInfo[layer.name].push(rectangleInfo);
       });
     }
+  },
+
+  redrawBombLayer: function(tileInfo) {
+    this.savedBomb.push(tileInfo);
+    this.drawBomb();
+  },
+
+  removeBomb: function(tileInfo) {
+    for (var z = 0; z < this.savedBomb.length; z++) {
+      if (this.savedBomb[z].x === tileInfo.x &&
+          this.savedBomb[z].y === tileInfo.y) {
+        this.savedBomb.splice(z, 0);
+      }
+    };
+    this.drawBomb();
+  },
+
+  drawBomb: function() {
+    for (var i = 0; i < this.savedBomb.length; i++) {
+      game.ctx.drawImage(this.image, 105, 0, 35, 35, this.savedBomb[i].x, this.savedBomb[i].y, 35, 35);
+    };
   },
 
   getLayerInfo: function(layerName) {

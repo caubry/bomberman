@@ -7,6 +7,8 @@ Game = Class.extend({
   inputEngine:null,
   staticBlockInfo: null,
   hasTiles: false,
+  tileX: 0,
+  tileY: 0,
 
   init: function(canvas) {
     this.canvas = canvas;
@@ -65,16 +67,32 @@ Game = Class.extend({
   },
 
   onKeyDown: function(keyCode) {
+    mediator.create(game.canvas, mediatorEvent.PLACE_BOMB, game.placeBomb);
     game.textureManager.playerManager.onKeyDown(keyCode);
   },
 
   onKeyUp: function(keyCode) {
     game.textureManager.playerManager.onKeyUp(keyCode);
+    if (keyCode === config.PLAYER_BOMB) game.placeBomb(game.textureManager.playerManager.getPlayerPos());
+  },
+
+  placeBomb: function(player) {
+    var x = Math.ceil(player.x);
+    var y = Math.ceil(player.y);
+
+    this.tileX = Math.floor(player.x / config.TILE_WIDTH);
+    this.tileY = Math.floor(player.y / config.TILE_HEIGHT);
+    game.redrawMap();
   },
 
   redrawMap: function() {
     game.mapLevel.draw(config.STATIC_BLOCK);
     game.mapLevel.draw(config.GREEN_AREA);
+    // If user wants to place a bomb
+    if (game.tileX && game.tileY) {
+      game.mapLevel.addToBombLayer({x: game.tileX * config.TILE_WIDTH, y: game.tileY * config.TILE_WIDTH});
+      game.textureManager.playerManager.drawPlayer.drawImage();
+    }
   },
 
   removeEvents: function() {

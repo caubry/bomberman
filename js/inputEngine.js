@@ -9,6 +9,8 @@ InputEngine = Class.extend({
     this.bind(65, 'move-left');
     this.bind(83, 'move-down');
     this.bind(68, 'move-right');
+    // Spacebar
+    this.bind(32, 'spacebar');
 
     $(document).keydown(this.onKeyDown);
     $(document).keyup(this.onKeyUp);

@@ -40,7 +40,7 @@ var mediatorEvent = {
   Called by PlayerManager, before reDrawing players
   Retrieved by Game*/
   REDRAW_PLAYERS: 'onPlayersRedrawn'
-
+  
 };
 
 
