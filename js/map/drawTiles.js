@@ -78,14 +78,14 @@ DrawTiles = Class.extend({
           this.savedBomb[z].y === tileInfo.y) {
         this.savedBomb.splice(z, 0);
       }
-    };
+    }
     this.drawBomb();
   },
 
   drawBomb: function() {
     for (var i = 0; i < this.savedBomb.length; i++) {
       game.ctx.drawImage(this.image, 105, 0, 35, 35, this.savedBomb[i].x, this.savedBomb[i].y, 35, 35);
-    };
+    }
   },
 
   getLayerInfo: function(layerName) {

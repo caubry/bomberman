@@ -83,7 +83,7 @@ LoadTiles = Class.extend({
             (totalGreenTiles.length - 10)
           );
 
-          console.log(currentMaxDestroyableBlock)
+          console.log(currentMaxDestroyableBlock);
 
           // /*Add the 'green' tile area to the destroyable blocks
           // and remove any extra 'destroyable blocks' from the map*/

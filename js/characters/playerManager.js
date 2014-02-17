@@ -229,7 +229,7 @@ PlayerManager = Class.extend({
     var playerPosition = {
       x: this.hitBoxWalls.x + (this.hitBoxWalls.w / 2),
       y: this.hitBoxWalls.y + (this.hitBoxWalls.h / 2)
-    }
+    };
     return playerPosition;
   }
 
